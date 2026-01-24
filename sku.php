@@ -16,5 +16,31 @@
     include "components/header.php";
     include "components/nav.php"
   ?>
+  <main>
+    <div id="title">
+      <h2>SKU Management</h2>
+      <button>+ ADD SKU</button>
+    </div>
+    <table>
+      <tr>
+        <th>SKU</th>
+        <th>DESCRIPTION</th>
+        <th>UOM</th>
+        <th>PIECES</th>
+        <th>DIMENSIONS (L x W x H)</th>
+        <th>WEIGHT</th>
+        <th>ACTIONS</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </main>
 </body>
 </html>

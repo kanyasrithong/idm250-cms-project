@@ -80,6 +80,8 @@ nav {
     height: 100%;
     width: fit-content;
 
+    position: absolute;
+
     .nav-button {
         display: flex;
         justify-content: center;
@@ -105,5 +107,44 @@ nav {
     .active {
         background-color: var(--primary-text-color);
         color: var(--background-color);
+    }
+}
+
+/* content styling */
+
+main {
+    margin: 2rem;
+    padding-left: 292px;
+    height: 100%;
+}
+
+table {
+    background-color: var(--surface-color);
+    border: 5px solid var(--divider-color);
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, tr, td {
+    border: 2px solid var(--divider-color);
+    padding: 1rem;
+}
+
+#title {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+        background-color: var(--nav-background-color);
+        border: none;
+        box-shadow: 0 4px 4px var(--drop-shadow-color);
+        color: var(--background-color);
+        height: fit-content;
+        padding: 1rem;
+    }
+
+    button:hover {
+        background-color: var(--hover-color);
+        cursor: pointer;
     }
 }

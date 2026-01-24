@@ -16,6 +16,5 @@
     include "components/header.php";
     include "components/nav.php"
   ?>
-
 </body>
 </html>
