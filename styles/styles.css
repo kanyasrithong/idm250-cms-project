@@ -1,0 +1,55 @@
+* {
+    box-sizing: border-box; 
+}
+
+/* colors & variables */
+html {
+    --background-color: #FFFFFF;
+    --nav-background-color: #8b7bbe;
+    --hover-color: #7c6faa;
+    --surface-color: #F3F4F6;
+    --primary-text-color: #111827;
+    --secondary-text-color: #6b7280;
+    --divider-color: #d1d5db;
+}
+
+/* basic styling */
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    margin: 0 auto;
+    padding: 0 5px;
+}
+
+/* font styling */
+h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 30px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+p.primary {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 30px;
+}
+
+p.secondary {
+    font-size: 0.875rem;
+    font-weight: 300;
+    line-height: 20px;
+}
+
+.button {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 20px;
+}
