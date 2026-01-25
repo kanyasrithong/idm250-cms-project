@@ -11,6 +11,7 @@ html {
     --primary-text-color: #111827;
     --secondary-text-color: #6b7280;
     --divider-color: #d1d5db;
+    --drop-shadow-color: #00000025;
 }
 
 /* basic styling */
@@ -20,7 +21,8 @@ body {
     background-color: var(--background-color);
     color: var(--primary-text-color);
     margin: 0 auto;
-    padding: 0 5px;
+    padding: 0;
+    height: 100vh;
 }
 
 /* font styling */
@@ -52,4 +54,97 @@ p.secondary {
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 20px;
+}
+
+/* component styling */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--nav-background-color);
+    color: var(--background-color);
+    padding: 0.5rem 1rem;
+
+    #actions {
+        display: flex;
+        gap: 2rem;
+    }
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    background-color: var(--nav-background-color);
+    padding: 1rem;
+    height: 100%;
+    width: fit-content;
+
+    position: absolute;
+
+    .nav-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color);
+        border: 0;
+        box-shadow: 0 4px 4px var(--drop-shadow-color);
+        height: 56px;
+        text-decoration: none;
+        width: 260px;
+    }
+
+    .nav-button:hover {
+        background-color: var(--divider-color);
+        cursor: pointer;
+    }
+
+    .nav-button:hover {
+        background-color: var(--divider-color);
+        cursor: pointer;
+    }
+
+    .active {
+        background-color: var(--primary-text-color);
+        color: var(--background-color);
+    }
+}
+
+/* content styling */
+
+main {
+    margin: 2rem;
+    padding-left: 292px;
+    height: 100%;
+}
+
+table {
+    background-color: var(--surface-color);
+    border: 5px solid var(--divider-color);
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, tr, td {
+    border: 2px solid var(--divider-color);
+    padding: 1rem;
+}
+
+#title {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+        background-color: var(--nav-background-color);
+        border: none;
+        box-shadow: 0 4px 4px var(--drop-shadow-color);
+        color: var(--background-color);
+        height: fit-content;
+        padding: 1rem;
+    }
+
+    button:hover {
+        background-color: var(--hover-color);
+        cursor: pointer;
+    }
 }
