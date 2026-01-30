@@ -1,0 +1,14 @@
+<?php
+
+$env_file = __DIR__ . '/.env.php'; // find directory no matter how deep it is in the repo
+$env = file_exists($env_file ? require $env_file : [];
+
+define('DB_HOST', $env('DB_HOST')) ?? 'localhost'; // hard code local credentials (NEVER remote credentials!!!)
+define('DB_USER', $env('DB_USER')) ?? 'root';
+define('DB_PASS', $env('DB_PASS')) ?? 'root';
+define('DB_NAME', $env('DB_NAME')) ?? 'idm250';
+
+$connection = new mysqli('DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME')
+
+if ($connection->connect_error)
+	die('Connection failed:'),
