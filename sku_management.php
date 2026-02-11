@@ -1,6 +1,6 @@
 <?php
   require_once "db.php";
-  $page = "sku";
+  $page = "sku_management";
 ?>
 <!DOCTYPE html>
 <html lang="en">
