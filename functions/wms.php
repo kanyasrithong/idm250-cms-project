@@ -2,6 +2,7 @@
 
 require_once '../db.php';
 
+// SKU FUNCTIONS
 // creating a sku
 function create_sku($data) {
     global $connection;
@@ -57,6 +58,21 @@ function get_sku($id) {
     $stmt = $connection->prepare("SELECT * FROM sku_management WHERE id = ? LIMIT 1");
 
     $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false) return null;
+    return$result->fetch_assoc();
+}
+
+// getting skus with a code
+function get_sku_by_code($sku) {
+    global $connection;
+
+    $stmt = $connection->prepare("SELECT * FROM sku_management WHERE sku = ? LIMIT 1");
+
+    $stmt->bind_param('s', $sku);
     $stmt->execute();
 
     $result = $stmt->get_result();
