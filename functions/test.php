@@ -4,54 +4,66 @@ require_once 'wms.php';
 // shows text in better format - keeps spaces & line breaks
 echo "<pre>";
 
-echo "\n GETTING ALL SKUS \n";
-print_r(get_skus());
+echo "\n CREATING 3 SKUS \n";
 
-echo "\n GETTING SKU AT ID = 1 \n";
-print_r(get_sku(1));
-
-echo "\n UPDATING SKU AT ID = 1 \n";
-$data = [
-    'ficha' => 'F999',
-    'sku' => 'SKU999',
-    'description' => 'Updated test item',
+$sku1 = create_sku([
+    'ficha' => 'F101',
+    'sku' => 'SKU101',
+    'description' => 'Test item 1',
     'uom_primary' => 'EA',
-    'piece_count' => 20,
-    'length_inches' => 10,
-    'width_inches' => 10,
-    'height_inches' => 10,
-    'weight_lbs' => 5,
-    'assembly' => 'Yes',
-    'rate' => 3.25
-];
-
-update_sku(1, $data);
-
-echo "\n AFTER UPDATE \n";
-print_r(get_sku(1));
-
-$new_id = create_sku([
-    'ficha' => 'F777',
-    'sku' => 'SKU777',
-    'description' => 'Created item',
-    'uom_primary' => 'EA',
-    'piece_count' => 5,
-    'length_inches' => 2,
-    'width_inches' => 2,
-    'height_inches' => 2,
-    'weight_lbs' => 1,
+    'piece_count' => 10,
+    'length_inches' => 5,
+    'width_inches' => 4,
+    'height_inches' => 3,
+    'weight_lbs' => 2,
     'assembly' => 'No',
-    'rate' => 0.99
+    'rate' => 1.25
 ]);
 
-echo "New ID: " . $new_id . "\n";
-print_r(get_sku($new_id));
+$sku2 = create_sku([
+    'ficha' => 'F102',
+    'sku' => 'SKU102',
+    'description' => 'Test item 2',
+    'uom_primary' => 'EA',
+    'piece_count' => 15,
+    'length_inches' => 6,
+    'width_inches' => 5,
+    'height_inches' => 4,
+    'weight_lbs' => 3,
+    'assembly' => 'Yes',
+    'rate' => 2.50
+]);
 
-// DELETING IS PERMANENT 
-// delete_sku(1);
+$sku3 = create_sku([
+    'ficha' => 'F103',
+    'sku' => 'SKU103',
+    'description' => 'Test item 3',
+    'uom_primary' => 'EA',
+    'piece_count' => 20,
+    'length_inches' => 7,
+    'width_inches' => 6,
+    'height_inches' => 5,
+    'weight_lbs' => 4,
+    'assembly' => 'No',
+    'rate' => 3.75
+]);
 
-// echo "\n---- AFTER DELETE ----\n";
-// print_r(get_sku(1));
+echo "Created IDs: $sku1, $sku2, $sku3\n";
 
+
+echo "\n GETTING EACH BY ID \n";
+print_r(get_sku($sku1));
+print_r(get_sku($sku2));
+print_r(get_sku($sku3));
+
+
+echo "\n GETTING EACH BY SKU CODE \n";
+print_r(get_sku_by_code('SKU101'));
+print_r(get_sku_by_code('SKU102'));
+print_r(get_sku_by_code('SKU103'));
+
+
+echo "\n GETTING ALL SKUS \n";
+print_r(get_skus());
 
 echo "</pre>";
