@@ -89,6 +89,7 @@ nav {
         background-color: var(--background-color);
         border: 0;
         box-shadow: 0 4px 4px var(--drop-shadow-color);
+        color: var(--primary-text-color);
         height: 56px;
         text-decoration: none;
         width: 260px;
@@ -107,6 +108,10 @@ nav {
     .active {
         background-color: var(--primary-text-color);
         color: var(--background-color);
+    }
+
+    .active:hover {
+        background-color: var(--primary-text-color);
     }
 }
 
