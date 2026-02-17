@@ -2,7 +2,7 @@
 
 require_once '../db.php';
 
-// SKU FUNCTIONS
+// --- SKU FUNCTIONS --- //
 // creating a sku
 function create_sku($data) {
     global $connection;
@@ -63,7 +63,7 @@ function get_sku($id) {
     $result = $stmt->get_result();
 
     if($result == false) return null;
-    return$result->fetch_assoc();
+    return $result->fetch_assoc();
 }
 
 // getting skus with a code
@@ -119,4 +119,135 @@ function delete_sku($id) {
     $stmt->bind_param('i', $id);
     return $stmt->execute();
 }
+
+
+
+// --- MPL FUNCTIONS --- //
+// creating an MPL
+function create_mpl($data) {
+    global $connection;
+
+    $reference = $connection->real_escape_string($data['reference_number']);
+    $trailer = $connection->real_escape_string($data['trailer_number']);
+    $arrival = $connection->real_escape_string($data['expected_arrival']);
+    $items = $data['items'];
+
+    $stmt = $connection->prepare("INSERT INTO mpls 
+        (reference_number, trailer_number, expected_arrival, status)
+        VALUES (?, ?, ?, 'open')");
+
+    $stmt->bind_param('sss', $reference, $trailer, $arrival);
+    if (!$stmt->execute())
+        return false;
+
+    $mpl_id = $connection->insert_id;
+
+    $stmt = $connection->prepare("INSERT INTO mpl_items 
+        (mpl_id, unit_id, sku)
+        VALUES (?, ?, ?)");
+
+    foreach ($items as $item) {
+        $unit_id = intval($item['unit_id']);
+        $sku = $connection->real_escape_string($item['sku']);
+
+        $stmt->bind_param('iis', $mpl_id, $unit_id, $sku);
+        if(!$stmt->execute())
+            return false;
+    }
+
+    return $mpl_id;
+}
+
+// looking up an MPL by reference number
+function get_mpl($reference_number) {
+    global $connection;
+
+    $reference_number = $connection->real_escape_string($reference_number);
+
+    $stmt = $connection->prepare("SELECT * FROM mpls WHERE reference_number = ? LIMIT 1");
+    $stmt->bind_param('s', $reference_number);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false || $result->num_rows === 0) return null;
+    
+    return $result->fetch_assoc();
+}
+
+
+
+// --- ORDER FUNCTIONS --- //
+// creating an order
+function create_order($data) {
+    global $connection;
+
+    $order_number = $connection->real_escape_string($data['order_number']);
+    $ship_to_company = $connection->real_escape_string($data['ship_to_company']);
+    $ship_to_street = $connection->real_escape_string($data['ship_to_street']);
+    $ship_to_city = $connection->real_escape_string($data['ship_to_city']);
+    $ship_to_state = $connection->real_escape_string($data['ship_to_state']);
+    $ship_to_zip = $connection->real_escape_string($data['ship_to_zip']);
+    $items = $data['items'];
+
+    $stmt = $connection->prepare("INSERT INTO orders 
+        (order_number, ship_to_company, ship_to_street, ship_to_city, ship_to_state, ship_to_zip, status)
+        VALUES (?, ?, ?, ?, ?, ?, 'open')");
+
+    $stmt->bind_param('ssssss', $order_number, $ship_to_company, $ship_to_street, $ship_to_city, $ship_to_state, $ship_to_zip);
+    if (!$stmt->execute())
+        return false;
+
+    $order_id = $connection->insert_id;
+
+    $stmt = $connection->prepare("INSERT INTO order_items 
+        (order_id, unit_id, sku)
+        VALUES (?, ?, ?)");
+
+    foreach ($items as $item) {
+        $unit_id = intval($item['unit_id']);
+        $sku = $connection->real_escape_string($item['sku']);
+
+        $stmt->bind_param('iis', $order_id, $unit_id, $sku);
+        if(!$stmt->execute())
+            return false;
+    }
+
+    return $order_id;
+}
+
+// looking up an order by number
+function get_order_by_number($order_number) {
+    global $connection;
+
+    $order_number = $connection->real_escape_string($order_number);
+
+    $stmt = $connection->prepare("SELECT * FROM orders WHERE order_number = ? LIMIT 1");
+    $stmt->bind_param('s', $order_number);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false || $result->num_rows === 0) return null;
+    
+    return $result->fetch_assoc();
+}
+
+
+
+// --- INVENTORY FUNCTIONS --- //
+// creating inventory
+
+// getting inventory
+
+// deleting inventory
+
+
+
+// --- SHIPPED ITEMS FUNCTIONS --- //
+// creating shipped items
+
+// getting shipped items
 ?>

@@ -4,66 +4,133 @@ require_once 'wms.php';
 // shows text in better format - keeps spaces & line breaks
 echo "<pre>";
 
-echo "\n CREATING 3 SKUS \n";
+echo "\n TESTING MPL FUNCTIONS \n";
 
-$sku1 = create_sku([
-    'ficha' => 'F101',
-    'sku' => 'SKU101',
-    'description' => 'Test item 1',
-    'uom_primary' => 'EA',
-    'piece_count' => 10,
-    'length_inches' => 5,
-    'width_inches' => 4,
-    'height_inches' => 3,
-    'weight_lbs' => 2,
-    'assembly' => 'No',
-    'rate' => 1.25
-]);
+$mpl_data = [
+    'reference_number' => 'REF123',
+    'trailer_number'   => 'TR456',
+    'expected_arrival' => '2026-02-15',
+    'items' => [
+        ['unit_id' => 1, 'sku' => 'SKU001'],
+        ['unit_id' => 2, 'sku' => 'SKU002']
+    ]
+];
 
-$sku2 = create_sku([
-    'ficha' => 'F102',
-    'sku' => 'SKU102',
-    'description' => 'Test item 2',
-    'uom_primary' => 'EA',
-    'piece_count' => 15,
-    'length_inches' => 6,
-    'width_inches' => 5,
-    'height_inches' => 4,
-    'weight_lbs' => 3,
-    'assembly' => 'Yes',
-    'rate' => 2.50
-]);
+$mpl_id = create_mpl($mpl_data);
 
-$sku3 = create_sku([
-    'ficha' => 'F103',
-    'sku' => 'SKU103',
-    'description' => 'Test item 3',
-    'uom_primary' => 'EA',
-    'piece_count' => 20,
-    'length_inches' => 7,
-    'width_inches' => 6,
-    'height_inches' => 5,
-    'weight_lbs' => 4,
-    'assembly' => 'No',
-    'rate' => 3.75
-]);
-
-echo "Created IDs: $sku1, $sku2, $sku3\n";
+if ($mpl_id === false) {
+    echo "Failed to create MPL<br>";
+} else {
+    echo "MPL created with ID: $mpl_id<br>";
+}
 
 
-echo "\n GETTING EACH BY ID \n";
-print_r(get_sku($sku1));
-print_r(get_sku($sku2));
-print_r(get_sku($sku3));
+$mpl = get_mpl('REF123');
+
+if ($mpl === null) {
+    echo "MPL not found<br>";
+} else {
+    echo "MPL found:<br>";
+    echo "<pre>";
+    print_r($mpl);
+    echo "</pre>";
+}
+
+echo "\n TESTING ORDER FUNCTIONS \n";
+$order_data = [
+    'order_number'    => 'ORD789',
+    'ship_to_company' => 'Test Company',
+    'ship_to_street'  => '123 Main St',
+    'ship_to_city'    => 'Philadelphia',
+    'ship_to_state'   => 'PA',
+    'ship_to_zip'     => '19104',
+    'items' => [
+        ['unit_id' => 3, 'sku' => 'SKU003'],
+        ['unit_id' => 4, 'sku' => 'SKU004']
+    ]
+];
+
+$order_id = create_order($order_data);
+
+if ($order_id === false) {
+    echo "Failed to create Order<br>";
+} else {
+    echo "Order created with ID: $order_id<br>";
+}
+
+$order = get_order_by_number('ORD789');
+
+if ($order === null) {
+    echo "Order not found<br>";
+} else {
+    echo "Order found:<br>";
+    echo "<pre>";
+    print_r($order);
+    echo "</pre>";
+}
 
 
-echo "\n GETTING EACH BY SKU CODE \n";
-print_r(get_sku_by_code('SKU101'));
-print_r(get_sku_by_code('SKU102'));
-print_r(get_sku_by_code('SKU103'));
+
+// echo "\n CREATING 3 SKUS \n";
+
+// $sku1 = create_sku([
+//     'ficha' => 'F101',
+//     'sku' => 'SKU101',
+//     'description' => 'Test item 1',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 10,
+//     'length_inches' => 5,
+//     'width_inches' => 4,
+//     'height_inches' => 3,
+//     'weight_lbs' => 2,
+//     'assembly' => 'No',
+//     'rate' => 1.25
+// ]);
+
+// $sku2 = create_sku([
+//     'ficha' => 'F102',
+//     'sku' => 'SKU102',
+//     'description' => 'Test item 2',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 15,
+//     'length_inches' => 6,
+//     'width_inches' => 5,
+//     'height_inches' => 4,
+//     'weight_lbs' => 3,
+//     'assembly' => 'Yes',
+//     'rate' => 2.50
+// ]);
+
+// $sku3 = create_sku([
+//     'ficha' => 'F103',
+//     'sku' => 'SKU103',
+//     'description' => 'Test item 3',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 20,
+//     'length_inches' => 7,
+//     'width_inches' => 6,
+//     'height_inches' => 5,
+//     'weight_lbs' => 4,
+//     'assembly' => 'No',
+//     'rate' => 3.75
+// ]);
+
+// echo "Created IDs: $sku1, $sku2, $sku3\n";
 
 
-echo "\n GETTING ALL SKUS \n";
-print_r(get_skus());
+// echo "\n GETTING EACH BY ID \n";
+// print_r(get_sku($sku1));
+// print_r(get_sku($sku2));
+// print_r(get_sku($sku3));
+
+
+// echo "\n GETTING EACH BY SKU CODE \n";
+// print_r(get_sku_by_code('SKU101'));
+// print_r(get_sku_by_code('SKU102'));
+// print_r(get_sku_by_code('SKU103'));
+
+
+// echo "\n GETTING ALL SKUS \n";
+// print_r(get_skus());
 
 echo "</pre>";
