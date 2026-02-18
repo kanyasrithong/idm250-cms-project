@@ -1,6 +1,6 @@
 <?php
   require_once "db.php";
-  $page = "order";
+  $page = "order_records";
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,6 +1,7 @@
 <?php
   require_once "db.php";
-  $page = "sku";
+  require "functions/wms.php";
+  $page = "sku_management";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,8 @@
 <body>
   <?php 
     include "components/header.php";
-    include "components/nav.php"
+    include "components/nav.php";
+    $skus = get_skus();
   ?>
   <main>
     <div id="title">
@@ -27,19 +29,20 @@
         <th>DESCRIPTION</th>
         <th>UOM</th>
         <th>PIECES</th>
-        <th>DIMENSIONS (L x W x H)</th>
+        <th>DIMENSIONS</th>
         <th>WEIGHT</th>
-        <th>ACTIONS</th>
       </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      
+      <?php foreach ($skus as $sku) : ?>
+        <tr>
+          <td><?= $sku['sku']; ?></td>
+          <td><?= $sku['description']?></td>
+          <td><?= $sku['uom_primary']?></td>
+          <td><?= $sku['piece_count']?></td>
+          <td><?= $sku['length_inches']?>in x <?= $sku['width_inches']?>in x <?= $sku['height_inches']?>in</td>
+          <td><?= $sku['weight_lbs']?>lbs</td>
+        </tr>
+      <?php endforeach ?>
     </table>
   </main>
 </body>

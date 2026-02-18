@@ -1,6 +1,6 @@
 <?php
   require_once "db.php";
-  $page = "inventory";
+  $page = "internal_inventory";
 ?>
 <!DOCTYPE html>
 <html lang="en">

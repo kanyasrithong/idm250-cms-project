@@ -1,6 +1,6 @@
 <?php
   require_once "db.php";
-  $page = "mpl";
+  $page = "mpl_records";
 ?>
 <!DOCTYPE html>
 <html lang="en">

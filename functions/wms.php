@@ -1,6 +1,6 @@
 <?php
 
-require_once '../db.php';
+require_once __DIR__ . '/../db.php';
 
 // --- SKU FUNCTIONS --- //
 // creating a sku
@@ -119,8 +119,6 @@ function delete_sku($id) {
     $stmt->bind_param('i', $id);
     return $stmt->execute();
 }
-
-
 
 // --- MPL FUNCTIONS --- //
 // creating an MPL
