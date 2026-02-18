@@ -1,6 +1,22 @@
 <?php
+  session_start();
   require_once "db.php";
   $page = "login";
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $stmt = $db->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+    if ($user && password_verify($password, $user['password'])) {
+      $_SESSION['user_id'] = $user['id'];
+      $_SESSION['user_email'] = $user['email'];
+      header("location: index.php");
+      exit;
+    } else {
+      // login failed
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,12 +29,12 @@
 </head>
 <body>
   <main class="login">
-    <form class="card">
+    <form class="card" method="POST">
       <h1>Login</h1>
-      <label for="username">Username</label>
-      <input type="text" id="username">
+      <label for="email">Email</label>
+      <input type="text" id="email" name="email">
       <label for="password">Password</label>
-      <input type="password" id="password">
+      <input type="password" id="password" name="password">
       <button>Login</button>
     </form>
   </main>
