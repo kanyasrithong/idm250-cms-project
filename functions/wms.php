@@ -20,7 +20,7 @@ function create_sku($data) {
     $rate = floatval($data['rate']);
 
     $stmt = $connection->prepare("INSERT INTO sku_management 
-        (ficha, sku, description, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs, assembly, rate)
+        (ficha, sku, `description`, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs, `assembly`, rate)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->bind_param(
@@ -99,9 +99,9 @@ function update_sku($id, $data) {
     $rate = floatval($data['rate']);
 
     $stmt = $connection->prepare("UPDATE sku_management 
-        SET ficha = ?, sku = ?, description = ?, 
+        SET ficha = ?, sku = ?, `description` = ?, 
             uom_primary = ?, piece_count = ?, length_inches = ?, width_inches = ?,
-            height_inches = ?, weight_lbs = ?, assembly = ?, rate = ?
+            height_inches = ?, weight_lbs = ?, `assembly` = ?, rate = ?
         WHERE id = ? LIMIT 1");
 
     $stmt->bind_param('ssssiddddssi', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $assembly, $rate, $id);
@@ -133,7 +133,7 @@ function create_mpl($data) {
     $items = $data['items'];
 
     $stmt = $connection->prepare("INSERT INTO mpls 
-        (reference_number, trailer_number, expected_arrival, status)
+        (reference_number, trailer_number, expected_arrival, `status`)
         VALUES (?, ?, ?, 'open')");
 
     $stmt->bind_param('sss', $reference, $trailer, $arrival);
@@ -192,7 +192,7 @@ function create_order($data) {
     $items = $data['items'];
 
     $stmt = $connection->prepare("INSERT INTO orders 
-        (order_number, ship_to_company, ship_to_street, ship_to_city, ship_to_state, ship_to_zip, status)
+        (order_number, ship_to_company, ship_to_street, ship_to_city, ship_to_state, ship_to_zip, `status`)
         VALUES (?, ?, ?, ?, ?, ?, 'open')");
 
     $stmt->bind_param('ssssss', $order_number, $ship_to_company, $ship_to_street, $ship_to_city, $ship_to_state, $ship_to_zip);
@@ -239,10 +239,53 @@ function get_order_by_number($order_number) {
 
 // --- INVENTORY FUNCTIONS --- //
 // creating inventory
+function create_inventory($unit_id, $sku_id) {
+    global $connection;
+    
+    $unit_id = $connection->real_escape_string($unit_id);
+    $sku_id = intval($sku_id);
+
+    $stmt = $connection->prepare("INSERT INTO inventory 
+        (unit_id, sku_id)
+        VALUES (?, ?)");
+
+    $stmt->bind_param('si', $unit_id, $sku_id);
+
+    return $stmt->execute();
+}
 
 // getting inventory
+function get_inventory() {
+    global $connection;
+
+    $sql = "SELECT i.*, s.sku, s.description, s.uom_primary
+        FROM inventory i
+        JOIN sku_management s ON i.sku_id = s.id
+        ORDER BY i.created_at DESC";
+
+    $stmt = $connection->prepare($sql);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $inventory = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $inventory[] = $row;
+    }
+
+    return $inventory;
+}
 
 // deleting inventory
+function delete_inventory($unit_id) {
+    global $connection;
+
+    $unit_id = $connection->real_escape_string($unit_id);
+    $stmt = $connection->prepare("DELETE FROM inventory WHERE unit_id = ? LIMIT 1");
+
+    $stmt->bind_param('s', $unit_id);
+    return $stmt->execute();
+}
 
 
 
