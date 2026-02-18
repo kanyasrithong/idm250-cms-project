@@ -4,70 +4,94 @@ require_once 'wms.php';
 // shows text in better format - keeps spaces & line breaks
 echo "<pre>";
 
-echo "\n TESTING MPL FUNCTIONS \n";
+echo "\nTESTING INVENTORY FUNCTIONS\n";
 
-$mpl_data = [
-    'reference_number' => 'REF123',
-    'trailer_number'   => 'TR456',
-    'expected_arrival' => '2026-02-15',
-    'items' => [
-        ['unit_id' => 1, 'sku' => 'SKU001'],
-        ['unit_id' => 2, 'sku' => 'SKU002']
-    ]
-];
+$unit_id = 'UNIT06132005';   
 
-$mpl_id = create_mpl($mpl_data);
+echo "Using unit_id: $unit_id\n\n";
 
-if ($mpl_id === false) {
-    echo "Failed to create MPL<br>";
-} else {
-    echo "MPL created with ID: $mpl_id<br>";
-}
+// --- Create inventory ---
+create_inventory($unit_id, 2);
+echo "Created $unit_id\n\n";
+
+// --- Show inventory ---
+echo "Inventory after insert:\n";
+print_r(get_inventory());
+
+// --- Delete inventory ---
+delete_inventory($unit_id);
+echo "\nDeleted $unit_id\n\n";
+
+// --- Show inventory again ---
+echo "Inventory after deletion:\n";
+print_r(get_inventory());
+
+echo "</pre>";
+
+// echo "\n TESTING MPL FUNCTIONS \n";
+
+// $mpl_data = [
+//     'reference_number' => 'REF123',
+//     'trailer_number'   => 'TR456',
+//     'expected_arrival' => '2026-02-15',
+//     'items' => [
+//         ['unit_id' => 1, 'sku' => 'SKU001'],
+//         ['unit_id' => 2, 'sku' => 'SKU002']
+//     ]
+// ];
+
+// $mpl_id = create_mpl($mpl_data);
+
+// if ($mpl_id === false) {
+//     echo "Failed to create MPL<br>";
+// } else {
+//     echo "MPL created with ID: $mpl_id<br>";
+// }
 
 
-$mpl = get_mpl('REF123');
+// $mpl = get_mpl('REF123');
 
-if ($mpl === null) {
-    echo "MPL not found<br>";
-} else {
-    echo "MPL found:<br>";
-    echo "<pre>";
-    print_r($mpl);
-    echo "</pre>";
-}
+// if ($mpl === null) {
+//     echo "MPL not found<br>";
+// } else {
+//     echo "MPL found:<br>";
+//     echo "<pre>";
+//     print_r($mpl);
+//     echo "</pre>";
+// }
 
-echo "\n TESTING ORDER FUNCTIONS \n";
-$order_data = [
-    'order_number'    => 'ORD789',
-    'ship_to_company' => 'Test Company',
-    'ship_to_street'  => '123 Main St',
-    'ship_to_city'    => 'Philadelphia',
-    'ship_to_state'   => 'PA',
-    'ship_to_zip'     => '19104',
-    'items' => [
-        ['unit_id' => 3, 'sku' => 'SKU003'],
-        ['unit_id' => 4, 'sku' => 'SKU004']
-    ]
-];
+// echo "\n TESTING ORDER FUNCTIONS \n";
+// $order_data = [
+//     'order_number'    => 'ORD789',
+//     'ship_to_company' => 'Test Company',
+//     'ship_to_street'  => '123 Main St',
+//     'ship_to_city'    => 'Philadelphia',
+//     'ship_to_state'   => 'PA',
+//     'ship_to_zip'     => '19104',
+//     'items' => [
+//         ['unit_id' => 3, 'sku' => 'SKU003'],
+//         ['unit_id' => 4, 'sku' => 'SKU004']
+//     ]
+// ];
 
-$order_id = create_order($order_data);
+// $order_id = create_order($order_data);
 
-if ($order_id === false) {
-    echo "Failed to create Order<br>";
-} else {
-    echo "Order created with ID: $order_id<br>";
-}
+// if ($order_id === false) {
+//     echo "Failed to create Order<br>";
+// } else {
+//     echo "Order created with ID: $order_id<br>";
+// }
 
-$order = get_order_by_number('ORD789');
+// $order = get_order_by_number('ORD789');
 
-if ($order === null) {
-    echo "Order not found<br>";
-} else {
-    echo "Order found:<br>";
-    echo "<pre>";
-    print_r($order);
-    echo "</pre>";
-}
+// if ($order === null) {
+//     echo "Order not found<br>";
+// } else {
+//     echo "Order found:<br>";
+//     echo "<pre>";
+//     print_r($order);
+//     echo "</pre>";
+// }
 
 
 
@@ -133,4 +157,4 @@ if ($order === null) {
 // echo "\n GETTING ALL SKUS \n";
 // print_r(get_skus());
 
-echo "</pre>";
+// echo "</pre>";
