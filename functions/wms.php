@@ -1,6 +1,6 @@
 <?php
 
-require_once '../db.php';
+require_once __DIR__ . '/../db.php';
 
 // --- SKU FUNCTIONS --- //
 // creating a sku
@@ -20,7 +20,7 @@ function create_sku($data) {
     $rate = floatval($data['rate']);
 
     $stmt = $connection->prepare("INSERT INTO sku_management 
-        (ficha, sku, description, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs, assembly, rate)
+        (ficha, sku, `description`, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs, `assembly`, rate)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->bind_param(
@@ -120,8 +120,6 @@ function delete_sku($id) {
     return $stmt->execute();
 }
 
-
-
 // --- MPL FUNCTIONS --- //
 // creating an MPL
 function create_mpl($data) {
@@ -192,7 +190,7 @@ function create_order($data) {
     $items = $data['items'];
 
     $stmt = $connection->prepare("INSERT INTO orders 
-        (order_number, ship_to_company, ship_to_street, ship_to_city, ship_to_state, ship_to_zip, status)
+        (order_number, ship_to_company, ship_to_street, ship_to_city, ship_to_state, ship_to_zip, `status`)
         VALUES (?, ?, ?, ?, ?, ?, 'open')");
 
     $stmt->bind_param('ssssss', $order_number, $ship_to_company, $ship_to_street, $ship_to_city, $ship_to_state, $ship_to_zip);
