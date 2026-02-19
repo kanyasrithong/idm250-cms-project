@@ -64,11 +64,25 @@ header {
     background-color: var(--nav-background-color);
     color: var(--background-color);
     padding: 0.5rem 1rem;
+}
 
-    #actions {
-        display: flex;
-        gap: 2rem;
-    }
+#actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+#actions .user-email,
+#actions .logout {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#actions .logout:hover {
+    color: var(--divider-color);
+    cursor: pointer;
 }
 
 nav {
@@ -186,4 +200,10 @@ th, tr, td {
     background: var(--nav-background-color);
     color: white;
     border: none;
+}
+
+.error {
+    color: #b91c1c;
+    font-size: 14px;
+    margin-bottom: 1rem;
 }
