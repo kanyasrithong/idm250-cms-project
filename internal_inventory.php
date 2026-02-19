@@ -1,5 +1,8 @@
 <?php
+  session_start();
   require_once "db.php";
+  require_once "functions/auth.php";
+  require_login();
   $page = "internal_inventory";
 ?>
 <!DOCTYPE html>

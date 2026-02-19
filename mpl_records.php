@@ -1,5 +1,8 @@
 <?php
+  session_start();
   require_once "db.php";
+  require_once "functions/auth.php";
+  require_login();
   $page = "mpl_records";
 ?>
 <!DOCTYPE html>

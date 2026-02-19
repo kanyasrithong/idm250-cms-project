@@ -1,6 +1,9 @@
 <?php
+  session_start();
   require_once "db.php";
+  require_once "functions/auth.php";
   require "functions/wms.php";
+  require_login();
   $page = "sku_management";
 ?>
 <!DOCTYPE html>
