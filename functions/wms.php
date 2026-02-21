@@ -251,6 +251,7 @@ function get_order_by_number($order_number) {
 
 // --- INVENTORY FUNCTIONS --- //
 // creating inventory
+// TODO: add created_at date + time, add + link description + uom_primary columns to skus table
 function create_inventory($unit_id, $sku_id) {
     global $connection;
     

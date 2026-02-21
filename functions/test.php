@@ -4,29 +4,29 @@ require_once 'wms.php';
 // // shows text in better format - keeps spaces & line breaks
 // echo "<pre>";
 
-// echo "\nTESTING INVENTORY FUNCTIONS\n";
+echo "\nTESTING INVENTORY FUNCTIONS\n";
 
-// $unit_id = 'UNIT06132005';   
+$unit_id = 'UNIT06132005';   
 
-// echo "Using unit_id: $unit_id\n\n";
+echo "Using unit_id: $unit_id\n\n";
 
-// // --- Create inventory ---
-// create_inventory($unit_id, 2);
-// echo "Created $unit_id\n\n";
+// --- Create inventory ---
+create_inventory($unit_id, 2);
+echo "Created $unit_id\n\n";
 
-// // --- Show inventory ---
-// echo "Inventory after insert:\n";
-// print_r(get_inventory());
+// --- Show inventory ---
+echo "Inventory after insert:\n";
+print_r(get_inventory());
 
-// // --- Delete inventory ---
-// delete_inventory($unit_id);
-// echo "\nDeleted $unit_id\n\n";
+// --- Delete inventory ---
+delete_inventory($unit_id);
+echo "\nDeleted $unit_id\n\n";
 
-// // --- Show inventory again ---
-// echo "Inventory after deletion:\n";
-// print_r(get_inventory());
+// --- Show inventory again ---
+echo "Inventory after deletion:\n";
+print_r(get_inventory());
 
-// echo "</pre>";
+echo "</pre>";
 
 // echo "\n TESTING MPL FUNCTIONS \n";
 
@@ -97,55 +97,55 @@ require_once 'wms.php';
 
 // echo "\n CREATING 3 SKUS \n";
 
-$sku1 = create_sku([
-    'ficha' => 'F101',
-    'sku' => 'SKU101',
-    'description' => 'Test item 1',
-    'uom_primary' => 'EA',
-    'piece_count' => 10,
-    'length_inches' => 5,
-    'width_inches' => 4,
-    'height_inches' => 3,
-    'weight_lbs' => 2,
-]);
+// $sku1 = create_sku([
+//     'ficha' => 'F101',
+//     'sku' => 'SKU101',
+//     'description' => 'Test item 1',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 10,
+//     'length_inches' => 5,
+//     'width_inches' => 4,
+//     'height_inches' => 3,
+//     'weight_lbs' => 2,
+// ]);
 
-$sku2 = create_sku([
-    'ficha' => 'F102',
-    'sku' => 'SKU102',
-    'description' => 'Test item 2',
-    'uom_primary' => 'EA',
-    'piece_count' => 15,
-    'length_inches' => 6,
-    'width_inches' => 5,
-    'height_inches' => 4,
-    'weight_lbs' => 3,
-]);
+// $sku2 = create_sku([
+//     'ficha' => 'F102',
+//     'sku' => 'SKU102',
+//     'description' => 'Test item 2',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 15,
+//     'length_inches' => 6,
+//     'width_inches' => 5,
+//     'height_inches' => 4,
+//     'weight_lbs' => 3,
+// ]);
 
-$sku3 = create_sku([
-    'ficha' => 'F103',
-    'sku' => 'SKU103',
-    'description' => 'Test item 3',
-    'uom_primary' => 'EA',
-    'piece_count' => 20,
-    'length_inches' => 7,
-    'width_inches' => 6,
-    'height_inches' => 5,
-    'weight_lbs' => 4,
-]);
+// $sku3 = create_sku([
+//     'ficha' => 'F103',
+//     'sku' => 'SKU103',
+//     'description' => 'Test item 3',
+//     'uom_primary' => 'EA',
+//     'piece_count' => 20,
+//     'length_inches' => 7,
+//     'width_inches' => 6,
+//     'height_inches' => 5,
+//     'weight_lbs' => 4,
+// ]);
 
-// echo "Created IDs: $sku1, $sku2, $sku3\n";
-
-
-// echo "\n GETTING EACH BY ID \n";
-// print_r(get_sku($sku1));
-// print_r(get_sku($sku2));
-// print_r(get_sku($sku3));
+// // echo "Created IDs: $sku1, $sku2, $sku3\n";
 
 
-echo "\n GETTING EACH BY SKU CODE \n";
-print_r(get_sku_by_code('SKU101'));
-print_r(get_sku_by_code('SKU102'));
-print_r(get_sku_by_code('SKU103'));
+// // echo "\n GETTING EACH BY ID \n";
+// // print_r(get_sku($sku1));
+// // print_r(get_sku($sku2));
+// // print_r(get_sku($sku3));
+
+
+// echo "\n GETTING EACH BY SKU CODE \n";
+// print_r(get_sku_by_code('SKU101'));
+// print_r(get_sku_by_code('SKU102'));
+// print_r(get_sku_by_code('SKU103'));
 
 
 // echo "\n GETTING ALL SKUS \n";
