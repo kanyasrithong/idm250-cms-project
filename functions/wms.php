@@ -7,6 +7,24 @@ require_once __DIR__ . '/../db.php';
 function create_sku($data) {
     global $connection;
 
+    $required_fields = [
+        'ficha',
+        'sku',
+        'description',
+        'uom_primary',
+        'piece_count',
+        'length_inches',
+        'width_inches',
+        'height_inches',
+        'weight_lbs'
+    ];
+
+    foreach ($required_fields as $field) {
+        if (!isset($data[$field])) {
+            return false;
+        }
+    }
+
     $ficha = $connection->real_escape_string($data['ficha']);
     $sku = $connection->real_escape_string($data['sku']);
     $desc = $connection->real_escape_string($data['description']);
@@ -16,15 +34,13 @@ function create_sku($data) {
     $width = floatval($data['width_inches']);
     $height = floatval($data['height_inches']);
     $weight = floatval($data['weight_lbs']);
-    $assembly = $connection->real_escape_string($data['assembly']);
-    $rate = floatval($data['rate']);
 
     $stmt = $connection->prepare("INSERT INTO sku_management 
-        (ficha, sku, `description`, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs, `assembly`, rate)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        (ficha, sku, `description`, uom_primary, piece_count, length_inches, width_inches, height_inches, weight_lbs)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt->bind_param(
-        'ssssiddddsd', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $assembly, $rate
+        'ssssidddd', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight
     );
 
     if ($stmt->execute())
@@ -95,16 +111,14 @@ function update_sku($id, $data) {
     $width = floatval($data['width_inches']);
     $height = floatval($data['height_inches']);
     $weight = floatval($data['weight_lbs']);
-    $assembly = $connection->real_escape_string($data['assembly']);
-    $rate = floatval($data['rate']);
 
     $stmt = $connection->prepare("UPDATE sku_management 
         SET ficha = ?, sku = ?, `description` = ?, 
             uom_primary = ?, piece_count = ?, length_inches = ?, width_inches = ?,
-            height_inches = ?, weight_lbs = ?, `assembly` = ?, rate = ?
+            height_inches = ?, weight_lbs = ?
         WHERE id = ? LIMIT 1");
 
-    $stmt->bind_param('ssssiddddssi', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $assembly, $rate, $id);
+    $stmt->bind_param('ssssiddddssi', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $id);
 
     return $stmt->execute();
 }
@@ -145,10 +159,10 @@ function create_mpl($data) {
         VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_id = intval($item['unit_id']);
+        $unit_id = $item['unit_id'];
         $sku = $connection->real_escape_string($item['sku']);
 
-        $stmt->bind_param('iis', $mpl_id, $unit_id, $sku);
+        $stmt->bind_param('iss', $mpl_id, $unit_id, $sku);
         if(!$stmt->execute())
             return false;
     }
