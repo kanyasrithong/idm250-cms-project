@@ -36,7 +36,7 @@
       exit();
     }
 
-    // error if unit_id(s) don't exist in inventory
+    // TODO: error if unit_id(s) don't exist in inventory
 
     $missing_items = [];
 
