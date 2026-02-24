@@ -1,8 +1,8 @@
 <?php
 require_once 'wms.php';
 
-// shows text in better format - keeps spaces & line breaks
-echo "<pre>";
+// // shows text in better format - keeps spaces & line breaks
+// echo "<pre>";
 
 // echo "<h2>Testing create_shipped_items()</h2>";
 
@@ -151,8 +151,6 @@ if (!empty($shipped)) {
 //     'width_inches' => 4,
 //     'height_inches' => 3,
 //     'weight_lbs' => 2,
-//     'assembly' => 'No',
-//     'rate' => 1.25
 // ]);
 
 // $sku2 = create_sku([
@@ -165,8 +163,6 @@ if (!empty($shipped)) {
 //     'width_inches' => 5,
 //     'height_inches' => 4,
 //     'weight_lbs' => 3,
-//     'assembly' => 'Yes',
-//     'rate' => 2.50
 // ]);
 
 // $sku3 = create_sku([
@@ -179,17 +175,15 @@ if (!empty($shipped)) {
 //     'width_inches' => 6,
 //     'height_inches' => 5,
 //     'weight_lbs' => 4,
-//     'assembly' => 'No',
-//     'rate' => 3.75
 // ]);
 
-// echo "Created IDs: $sku1, $sku2, $sku3\n";
+// // echo "Created IDs: $sku1, $sku2, $sku3\n";
 
 
-// echo "\n GETTING EACH BY ID \n";
-// print_r(get_sku($sku1));
-// print_r(get_sku($sku2));
-// print_r(get_sku($sku3));
+// // echo "\n GETTING EACH BY ID \n";
+// // print_r(get_sku($sku1));
+// // print_r(get_sku($sku2));
+// // print_r(get_sku($sku3));
 
 
 // echo "\n GETTING EACH BY SKU CODE \n";

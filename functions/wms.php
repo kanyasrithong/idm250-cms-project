@@ -7,6 +7,24 @@ require_once __DIR__ . '/../db.php';
 function create_sku($data) {
     global $connection;
 
+    $required_fields = [
+        'ficha',
+        'sku',
+        'description',
+        'uom_primary',
+        'piece_count',
+        'length_inches',
+        'width_inches',
+        'height_inches',
+        'weight_lbs'
+    ];
+
+    foreach ($required_fields as $field) {
+        if (!isset($data[$field])) {
+            return false;
+        }
+    }
+
     $ficha = $connection->real_escape_string($data['ficha']);
     $sku = $connection->real_escape_string($data['sku']);
     $desc = $connection->real_escape_string($data['description']);
@@ -141,10 +159,10 @@ function create_mpl($data) {
         VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_id = intval($item['unit_id']);
+        $unit_id = $item['unit_id'];
         $sku = $connection->real_escape_string($item['sku']);
 
-        $stmt->bind_param('iis', $mpl_id, $unit_id, $sku);
+        $stmt->bind_param('iss', $mpl_id, $unit_id, $sku);
         if(!$stmt->execute())
             return false;
     }
