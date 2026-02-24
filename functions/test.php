@@ -4,29 +4,73 @@ require_once 'wms.php';
 // shows text in better format - keeps spaces & line breaks
 echo "<pre>";
 
-echo "\nTESTING INVENTORY FUNCTIONS\n";
+// echo "<h2>Testing create_shipped_items()</h2>";
 
-$unit_id = 'UNIT06132005';   
+// // --- Test Data ---
+// $test_data = [
+//     'order_id' => 1, // make sure this order exists in your DB
+//     'order_number' => 'ORD-1001',
+//     'shipped_at' => date('Y-m-d H:i:s'),
+//     'items' => [
+//         [
+//             'unit_id' => 'UNIT-001',
+//             'sku' => 'SKU-ABC',
+//             'description' => 'Test Product A'
+//         ],
+//         [
+//             'unit_id' => 'UNIT-002',
+//             'sku' => 'SKU-XYZ',
+//             'description' => 'Test Product B'
+//         ]
+//     ]
+// ];
 
-echo "Using unit_id: $unit_id\n\n";
+// // --- Run Create Function ---
+// $result = create_shipped_items($test_data);
 
-// --- Create inventory ---
-create_inventory($unit_id, 2);
-echo "Created $unit_id\n\n";
+// if ($result) {
+//     echo "Shipped items inserted successfully.<br><br>";
+// } else {
+//     echo "Failed to insert shipped items.<br><br>";
+// }
 
-// --- Show inventory ---
-echo "Inventory after insert:\n";
-print_r(get_inventory());
+echo "<h2>Testing get_shipped_items()</h2>";
 
-// --- Delete inventory ---
-delete_inventory($unit_id);
-echo "\nDeleted $unit_id\n\n";
+// --- Run Get Function ---
+$shipped = get_shipped_items();
 
-// --- Show inventory again ---
-echo "Inventory after deletion:\n";
-print_r(get_inventory());
+if (!empty($shipped)) {
+    echo "<pre>";
+    print_r($shipped);
+    echo "</pre>";
+} else {
+    echo "No shipped orders found (make sure order status is 'closed').";
+}
 
-echo "</pre>";
+
+// echo "\nTESTING INVENTORY FUNCTIONS\n";
+
+// $unit_id = 'UNIT06132005';   
+
+// echo "Using unit_id: $unit_id\n\n";
+
+// // --- Create inventory ---
+// create_inventory($unit_id, 2);
+// echo "Created $unit_id\n\n";
+
+// // --- Show inventory ---
+// echo "Inventory after insert:\n";
+// print_r(get_inventory());
+
+// // --- Delete inventory ---
+// delete_inventory($unit_id);
+// echo "\nDeleted $unit_id\n\n";
+
+// // --- Show inventory again ---
+// echo "Inventory after deletion:\n";
+// print_r(get_inventory());
+
+// echo "</pre>";
 
 // echo "\n TESTING MPL FUNCTIONS \n";
 
