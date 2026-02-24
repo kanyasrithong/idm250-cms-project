@@ -1,6 +1,9 @@
 <?php
+  session_start();
   require_once "db.php";
-  $page = "order";
+  require_once "functions/auth.php";
+  require_login();
+  $page = "order_records";
 ?>
 <!DOCTYPE html>
 <html lang="en">
