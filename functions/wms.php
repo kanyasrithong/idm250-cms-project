@@ -118,7 +118,7 @@ function update_sku($id, $data) {
             height_inches = ?, weight_lbs = ?
         WHERE id = ? LIMIT 1");
 
-    $stmt->bind_param('ssssiddddssi', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $id);
+    $stmt->bind_param('ssssiddddi', $ficha, $sku, $desc, $uom, $piece_count, $length, $width, $height, $weight, $id);
 
     return $stmt->execute();
 }
@@ -251,18 +251,22 @@ function get_order_by_number($order_number) {
 
 // --- INVENTORY FUNCTIONS --- //
 // creating inventory
-// TODO: add created_at date + time, add + link description + uom_primary columns to skus table
-function create_inventory($unit_id, $sku_id) {
+function create_inventory($data) {
     global $connection;
     
-    $unit_id = $connection->real_escape_string($unit_id);
-    $sku_id = intval($sku_id);
+    $order_number = $connection->real_escape_string($data['order_number']);
+    $unit_number = $connection->real_escape_string($data['unit_number']);
+    $ficha = $connection->real_escape_string($data['ficha']);
+    $description = $connection->real_escape_string($data['description']);
+    $quantity_shipped = intval($data['quantity_shipped']);
+    $footage_quantity = floatval($data['footage_quantity']);
+    $ship_date = $connection->real_escape_string($data['ship_date']);
 
     $stmt = $connection->prepare("INSERT INTO inventory 
-        (unit_id, sku_id)
-        VALUES (?, ?)");
+        (order_number, unit_number, ficha, `description`, quantity_shipped, footage_quantity, ship_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->bind_param('si', $unit_id, $sku_id);
+    $stmt->bind_param('ssssids', $order_number, $unit_number, $ficha, $description, $quantity_shipped, $footage_quantity, $ship_date);
 
     return $stmt->execute();
 }
@@ -273,7 +277,7 @@ function get_inventory() {
 
     $sql = "SELECT i.*, s.sku, s.description, s.uom_primary
         FROM inventory i
-        JOIN sku_management s ON i.sku_id = s.id
+        JOIN sku_management s ON i.ficha = s.id
         ORDER BY i.created_at DESC";
 
     $stmt = $connection->prepare($sql);
@@ -290,13 +294,13 @@ function get_inventory() {
 }
 
 // deleting inventory
-function delete_inventory($unit_id) {
+function delete_inventory($unit_number) {
     global $connection;
 
-    $unit_id = $connection->real_escape_string($unit_id);
-    $stmt = $connection->prepare("DELETE FROM inventory WHERE unit_id = ? LIMIT 1");
+    $unit_number = $connection->real_escape_string($unit_number);
+    $stmt = $connection->prepare("DELETE FROM inventory WHERE unit_number = ? LIMIT 1");
 
-    $stmt->bind_param('s', $unit_id);
+    $stmt->bind_param('s', $unit_number);
     return $stmt->execute();
 }
 
@@ -304,6 +308,55 @@ function delete_inventory($unit_id) {
 
 // --- SHIPPED ITEMS FUNCTIONS --- //
 // creating shipped items
+function create_shipped_items($data) {
+    global $connection;
+
+    $order_id = intval($data['order_id']);
+    $order_number = $connection->real_escape_string($data['order_number']);
+    $shipped_at = $connection->real_escape_string($data['shipped_at']);
+    $items = $data['items'];
+
+    $stmt = $connection->prepare("INSERT INTO shipped_items 
+        (order_id, order_number, unit_id, sku, sku_description, shipped_at)
+        VALUES (?, ?, ?, ?, ?, ?)"
+    );
+
+    if (!$stmt) {
+        return false;
+    }
+
+    foreach ($items as $item) {
+        $stmt->bind_param('isssss', $order_id, $order_number, $item['unit_id'], $item['sku'], $item['description'], $shipped_at);
+        if (!$stmt->execute()) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 // getting shipped items
+function get_shipped_items() {
+    global $connection;
+
+    $sql = "SELECT o.order_number, o.ship_to_company, si.shipped_at, COUNT(*) as item_count
+        FROM orders o
+        JOIN shipped_items si ON o.id = si.order_id
+        WHERE o.status = 'closed'
+        GROUP BY o.id, o.order_number, o.ship_to_company, si.shipped_at
+        ORDER BY si.shipped_at DESC";
+
+    $stmt = $connection->prepare($sql);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $shipped_items = [];
+
+    while($row = $result->fetch_assoc()) {
+        $shipped_items[] = $row;
+    }
+    
+    return $shipped_items;
+}
+
 ?>
