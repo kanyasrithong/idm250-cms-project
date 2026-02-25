@@ -1,6 +1,48 @@
 <?php
 require_once 'wms.php';
 
+// echo "<pre>";
+// echo "<h3>Testing create_inventory()</h3>";
+
+// $test_data = [
+//     "order_number" => "ORD-TEST-001",
+//     "unit_number" => "UNIT-99",
+//     "ficha" => "F123", // make sure this ficha exists in sku_management
+//     "description" => "Test Inventory Item",
+//     "quantity_shipped" => 10,
+//     "footage_quantity" => 25.5,
+//     "ship_date" => date("Y-m-d")
+// ];
+
+// $result = create_inventory($test_data);
+
+// if ($result) {
+//     echo "Inventory Insert Successful<br><br>";
+// } else {
+//     echo "Insert Failed: " . $connection->error . "<br><br>";
+// }
+
+// echo "<h3>Testing get_inventory()</h3>";
+
+// $inventory = get_inventory();
+
+// if (!empty($inventory)) {
+//     foreach ($inventory as $row) {
+//         echo "ID: " . $row['id'] . "<br>";
+//         echo "Order #: " . $row['order_number'] . "<br>";
+//         echo "Ficha: " . $row['ficha'] . "<br>";
+//         echo "SKU: " . ($row['sku'] ?? 'N/A') . "<br>";
+//         echo "SKU Description: " . ($row['description'] ?? 'N/A') . "<br>";
+//         echo "Quantity: " . $row['quantity_shipped'] . "<br>";
+//         echo "Footage: " . $row['footage_quantity'] . "<br>";
+//         echo "---------------------------<br>";
+//     }
+// } else {
+//     echo "No inventory records found.";
+// }
+
+// echo "</pre>";
+
 // // shows text in better format - keeps spaces & line breaks
 // echo "<pre>";
 
@@ -34,18 +76,18 @@ require_once 'wms.php';
 //     echo "Failed to insert shipped items.<br><br>";
 // }
 
-echo "<h2>Testing get_shipped_items()</h2>";
+// echo "<h2>Testing get_shipped_items()</h2>";
 
-// --- Run Get Function ---
-$shipped = get_shipped_items();
+// // --- Run Get Function ---
+// $shipped = get_shipped_items();
 
-if (!empty($shipped)) {
-    echo "<pre>";
-    print_r($shipped);
-    echo "</pre>";
-} else {
-    echo "No shipped orders found (make sure order status is 'closed').";
-}
+// if (!empty($shipped)) {
+//     echo "<pre>";
+//     print_r($shipped);
+//     echo "</pre>";
+// } else {
+//     echo "No shipped orders found (make sure order status is 'closed').";
+// }
 
 
 // echo "\nTESTING INVENTORY FUNCTIONS\n";

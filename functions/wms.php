@@ -170,6 +170,23 @@ function create_mpl($data) {
     return $mpl_id;
 }
 
+// getting mpls
+function get_mpls() {
+    global $connection;
+
+    $stmt = $connection->prepare("SELECT * FROM mpls");
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $mpls = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $mpls[] = $row;
+    }
+
+    return $mpls;
+}
+
 // looking up an MPL by reference number
 function get_mpl($reference_number) {
     global $connection;
@@ -218,15 +235,32 @@ function create_order($data) {
         VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_id = intval($item['unit_id']);
+        $unit_id = $connection->real_escape_string($item['unit_id']);
         $sku = $connection->real_escape_string($item['sku']);
 
-        $stmt->bind_param('iis', $order_id, $unit_id, $sku);
+        $stmt->bind_param('iss', $order_id, $unit_id, $sku);
         if(!$stmt->execute())
             return false;
     }
 
     return $order_id;
+}
+
+// getting orders
+function get_orders() {
+    global $connection;
+
+    $stmt = $connection->prepare("SELECT * FROM orders");
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $orders = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $orders[] = $row;
+    }
+
+    return $orders;
 }
 
 // looking up an order by number
@@ -277,7 +311,7 @@ function get_inventory() {
 
     $sql = "SELECT i.*, s.sku, s.description, s.uom_primary
         FROM inventory i
-        JOIN sku_management s ON i.ficha = s.id
+        JOIN sku_management s ON i.ficha = s.ficha
         ORDER BY i.created_at DESC";
 
     $stmt = $connection->prepare($sql);
