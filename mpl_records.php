@@ -2,6 +2,7 @@
   session_start();
   require_once "db.php";
   require_once "functions/auth.php";
+  require "functions/wms.php";
   require_login();
   $page = "mpl_records";
 ?>
@@ -17,32 +18,38 @@
 <body>
   <?php 
     include "components/header.php";
-    include "components/nav.php"
+    include "components/nav.php";
+    $mpl_records = get_mpls();
   ?>
   <main>
     <div id="title">
       <h2>MPL Records</h2>
-      <h3>0 units</h3>
+      <h3><?= count($mpl_records) ?> MPLs</h3>
     </div>
     <table>
       <tr>
-        <th>SKU</th>
         <th>REFERENCE NUMBER</th>
         <th>TRAILER NUMBER</th>
         <th>EXPECTED ARRIVAL</th>
-        <th>ITEMS</th>
         <th>STATUS</th>
-        <th>RECEIVED</th>
+        <th>ITEMS</th>
+        <th>ACTIONS</th>
       </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+
+      <?php foreach ($mpl_records as $mpl) : ?>
+        <tr>
+          <td><?= $mpl['reference_number'] ?></td>
+          <td><?= $mpl['trailer_number'] ?></td>
+          <td><?= $mpl['expected_arrival'] ?></td>
+          <td><?= $mpl['status'] ?></td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      <?php endforeach ?>
+
+      <?php if (empty($mpl_records)) : ?>
+        <tr><td colspan="6">No MPLs found.</td></tr>
+      <?php endif; ?>
     </table>
   </main>
 </body>

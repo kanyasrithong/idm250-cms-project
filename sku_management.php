@@ -46,6 +46,10 @@
           <td><?= $sku['weight_lbs']?>lbs</td>
         </tr>
       <?php endforeach ?>
+
+      <?php if (empty($skus)) : ?>
+        <tr><td colspan="6">No SKUs found.</td></tr>
+      <?php endif; ?>
     </table>
   </main>
 </body>
