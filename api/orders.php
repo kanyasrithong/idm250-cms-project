@@ -19,7 +19,6 @@
     // define required fields
     $data_keys = ['order_number', 'ship_to_company', 'ship_to_street', 'ship_to_city', 'ship_to_state', 'ship_to_zip', 'items'];
 
-
     // validate required fields
     foreach ($data_keys as $key) {
       if (!isset($data[$key])) {
@@ -36,24 +35,24 @@
       exit();
     }
 
-    // TODO: error if unit_id(s) don't exist in inventory
-
+    // error if each unit_id doesn't exist in inventory
     $missing_items = [];
 
     foreach ($data['items'] as $item) {
-      $unit_id = $item['unit_id'];
-
-      if (!$unit_id) {
-        $missing_items[] = $item['unit_id'];
+      $unit_number = get_inventory_by_unit_number($item['unit_number']);
+    
+      if (!$unit_number) {
+        $missing_items[] = $item['unit_number'];
       }
 
       if ($missing_items) {
         http_response_code(400);
-        echo json_encode(['error' => 'Bad Request', 'details' => 'Units not in WMS inventory: ' . implode(', ', $missing_skus)]);
+        echo json_encode(['error' => 'Bad Request', 'details' => 'Units not in WMS inventory: ' . implode(', ', $missing_items)]);
         exit();
       }
     }
 
+    // creating order record
     $order_id = create_order($data);
 
     if ($order_id) {

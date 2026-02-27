@@ -155,14 +155,14 @@ function create_mpl($data) {
     $mpl_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO mpl_items 
-        (mpl_id, unit_id, sku)
+        (mpl_id, unit_number, sku)
         VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_id = $item['unit_id'];
+        $unit_number = $item['unit_number'];
         $sku = $connection->real_escape_string($item['sku']);
 
-        $stmt->bind_param('iss', $mpl_id, $unit_id, $sku);
+        $stmt->bind_param('iss', $mpl_id, $unit_number, $sku);
         if(!$stmt->execute())
             return false;
     }
@@ -231,14 +231,14 @@ function create_order($data) {
     $order_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO order_items 
-        (order_id, unit_id, sku)
+        (order_id, unit_number, sku)
         VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_id = $connection->real_escape_string($item['unit_id']);
+        $unit_number = $connection->real_escape_string($item['unit_number']);
         $sku = $connection->real_escape_string($item['sku']);
 
-        $stmt->bind_param('iss', $order_id, $unit_id, $sku);
+        $stmt->bind_param('iss', $order_id, $unit_number, $sku);
         if(!$stmt->execute())
             return false;
     }
@@ -351,7 +351,7 @@ function create_shipped_items($data) {
     $items = $data['items'];
 
     $stmt = $connection->prepare("INSERT INTO shipped_items 
-        (order_id, order_number, unit_id, sku, sku_description, shipped_at)
+        (order_id, order_number, unit_number, sku, sku_description, shipped_at)
         VALUES (?, ?, ?, ?, ?, ?)"
     );
 
@@ -360,7 +360,7 @@ function create_shipped_items($data) {
     }
 
     foreach ($items as $item) {
-        $stmt->bind_param('isssss', $order_id, $order_number, $item['unit_id'], $item['sku'], $item['description'], $shipped_at);
+        $stmt->bind_param('isssss', $order_id, $order_number, $item['unit_number'], $item['sku'], $item['description'], $shipped_at);
         if (!$stmt->execute()) {
             return false;
         }
