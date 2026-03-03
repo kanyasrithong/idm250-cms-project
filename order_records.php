@@ -41,7 +41,7 @@
         <th>COMPANY</th>
         <th>SHIPPING ADDRESS</th>
         <th>STATUS</th>
-        <th>ITEMS</th>
+        <th>ITEMS (UNIT NUMBER)</th>
         <th>ACTIONS</th>
       </tr>
 
