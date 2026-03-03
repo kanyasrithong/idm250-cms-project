@@ -9,6 +9,6 @@ define('DB_NAME', $env['DB_NAME'] ?? 'idm250');
 
 $connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-if ($connection->connect_error) 
+if ($connection->connect_error)
 	die();
 

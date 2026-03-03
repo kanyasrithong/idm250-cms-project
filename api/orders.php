@@ -35,7 +35,9 @@
       exit();
     }
 
-    // error if each unit_id doesn't exist in inventory
+    // potential TODO: error handle if order items is empty
+
+    // error if each unit_number doesn't exist in inventory
     $missing_items = [];
 
     foreach ($data['items'] as $item) {
@@ -57,7 +59,7 @@
 
     if ($order_id) {
       http_response_code(201);
-      echo json_encode(['success' => true,'message' => "Order received successfully", 'mpl_id' => $order_id]);
+      echo json_encode(['success' => true,'message' => "Order received successfully", 'order_id' => $order_id]);
     } else {
       http_response_code(500);
       echo json_encode(['error' => 'Server Error']);
@@ -69,4 +71,3 @@
     echo json_encode(['error' => 'Method not allowed']);
     exit();
   }
-

@@ -168,6 +168,14 @@ th, tr, td {
     }
 }
 
+.callback-form {
+    display: inline;
+}
+
+.callback-form button {
+    
+}
+
 /* login styling */
 
 .login {

@@ -24,29 +24,25 @@
   <main>
     <div id="title">
       <h2>Inventory</h2>
-      <h3><?= count($inventory_items) ?> orders</h3>
+      <h3><?= count($inventory_items) ?> Inventory Items</h3>
     </div>
     <table>
       <tr>
-        <th>ORDER NUMBER</th>
         <th>UNIT NUMBER</th>
-        <th>FICHA</th>
+        <th>SKU</th>
         <th>DESCRIPTION</th>
+        <th>UNIT OF MEASURE</th>
         <th>QUANTITY SHIPPED</th>
-        <th>FOOTAGE QUANTITY</th>
-        <th>SHIP DATE</th>
         <th>CREATED AT</th>
       </tr>
 
       <?php foreach ($inventory_items as $inventory) : ?>
         <tr>
-          <td><?= $inventory['order_number']; ?></td>
           <td><?= $inventory['unit_number']?></td>
-          <td><?= $inventory['ficha']?></td>
+          <td><?= $inventory['sku']?></td>
           <td><?= $inventory['description']?></td>
+          <td><?= $inventory['uom_primary']?></td>
           <td><?= $inventory['quantity_shipped']?></td>
-          <td><?= $inventory['footage_quantity']?></td>
-          <td><?= $inventory['ship_date']?></td>
           <td><?= $inventory['created_at']?></td>
         </tr>
       <?php endforeach ?>

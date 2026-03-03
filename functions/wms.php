@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/api_client.php';
 
 // --- SKU FUNCTIONS --- //
 // creating a sku
@@ -155,14 +156,15 @@ function create_mpl($data) {
     $mpl_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO mpl_items 
-        (mpl_id, unit_number, sku)
-        VALUES (?, ?, ?)");
+        (mpl_id, unit_number, sku, quantity_shipped)
+        VALUES (?, ?, ?, ?)");
 
     foreach ($items as $item) {
         $unit_number = $item['unit_number'];
         $sku = $connection->real_escape_string($item['sku']);
+        $quantity_shipped = intval($item['quantity_shipped']);
 
-        $stmt->bind_param('iss', $mpl_id, $unit_number, $sku);
+        $stmt->bind_param('issi', $mpl_id, $unit_number, $sku, $quantity_shipped);
         if(!$stmt->execute())
             return false;
     }
@@ -205,7 +207,41 @@ function get_mpl($reference_number) {
     return $result->fetch_assoc();
 }
 
+// get mpl items by mpl id
+function get_mpl_items($mpl_id) {
+    global $connection;
 
+    $mpl_id = intval($mpl_id);
+
+    $stmt = $connection->prepare(
+        "SELECT mi.*, s.sku, s.description
+        FROM mpl_items mi
+        JOIN sku_management s ON mi.sku = s.sku
+        WHERE mi.mpl_id = ?"
+    );
+    $stmt->bind_param('i', $mpl_id);
+
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $mpl_items = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $mpl_items[] = $row;
+    }
+
+    $stmt->close();
+    return $mpl_items;
+}
+
+function update_mpl_status($mpl_id) {
+    global $connection;
+
+    $stmt = $connection->prepare("UPDATE mpls SET `status` = 'closed' WHERE id = ?");
+    $stmt->bind_param('i', $mpl_id);
+
+    $stmt->execute();
+}
 
 // --- ORDER FUNCTIONS --- //
 // creating an order
@@ -231,14 +267,18 @@ function create_order($data) {
     $order_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO order_items 
-        (order_id, unit_number, sku)
-        VALUES (?, ?, ?)");
+        (order_id, unit_number, sku, quantity_shipped)
+        VALUES (?, ?, ?, ?)");
 
     foreach ($items as $item) {
-        $unit_number = $connection->real_escape_string($item['unit_number']);
-        $sku = $connection->real_escape_string($item['sku']);
+        // finds item details in inventory
+        $find_item = get_inventory_by_unit_number($item['unit_number']);
 
-        $stmt->bind_param('iss', $order_id, $unit_number, $sku);
+        $unit_number = $connection->real_escape_string($find_item['unit_number']);
+        $sku = $connection->real_escape_string($find_item['sku']);
+        $quantity_shipped = intval($find_item['quantity_shipped']);
+
+        $stmt->bind_param('issi', $order_id, $unit_number, $sku, $quantity_shipped);
         if(!$stmt->execute())
             return false;
     }
@@ -263,6 +303,24 @@ function get_orders() {
     return $orders;
 }
 
+// looking up an order by id
+function get_order($order_id) {
+    global $connection;
+
+    $order_id = $connection->real_escape_string($order_id);
+
+    $stmt = $connection->prepare("SELECT * FROM orders WHERE id = ? LIMIT 1");
+    $stmt->bind_param('s', $order_id);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false || $result->num_rows === 0) return null;
+    
+    return $result->fetch_assoc();
+}
+
 // looking up an order by number
 function get_order_by_number($order_number) {
     global $connection;
@@ -281,26 +339,61 @@ function get_order_by_number($order_number) {
     return $result->fetch_assoc();
 }
 
+// get order items by order id
+function get_order_items($order_id) {
+    global $connection;
 
+    $order_id = intval($order_id);
+
+    $stmt = $connection->prepare(
+        "SELECT oi.*, i.sku, s.sku, s.description
+        FROM order_items oi
+        JOIN inventory i ON oi.unit_number = i.unit_number
+        JOIN sku_management s ON i.sku = s.sku
+        WHERE oi.order_id = ?"
+    );
+    $stmt->bind_param('i', $order_id);
+    
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $order_items = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $order_items[] = $row;
+    }
+
+    $stmt->close();
+    return $order_items;
+}
+
+function update_order_status($id) {
+    global $connection;
+
+    $id = intval($id);
+    $shipped_at = date("Y-m-d G:i:s");
+
+    $stmt = $connection->prepare("UPDATE orders SET `status` = 'closed', shipped_at = ? WHERE id = ?");
+    $stmt->bind_param('si', $shipped_at, $id);
+
+    $stmt->execute();
+    return $shipped_at;
+};
 
 // --- INVENTORY FUNCTIONS --- //
 // creating inventory
 function create_inventory($data) {
     global $connection;
     
-    $order_number = $connection->real_escape_string($data['order_number']);
     $unit_number = $connection->real_escape_string($data['unit_number']);
-    $ficha = $connection->real_escape_string($data['ficha']);
-    $description = $connection->real_escape_string($data['description']);
+    $sku = $connection->real_escape_string($data['sku']);
     $quantity_shipped = intval($data['quantity_shipped']);
-    $footage_quantity = floatval($data['footage_quantity']);
-    $ship_date = $connection->real_escape_string($data['ship_date']);
 
     $stmt = $connection->prepare("INSERT INTO inventory 
-        (order_number, unit_number, ficha, `description`, quantity_shipped, footage_quantity, ship_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)");
+        (unit_number, sku, quantity_shipped)
+        VALUES (?, ?, ?)");
 
-    $stmt->bind_param('ssssids', $order_number, $unit_number, $ficha, $description, $quantity_shipped, $footage_quantity, $ship_date);
+    $stmt->bind_param('ssi', $unit_number, $sku, $quantity_shipped);
 
     return $stmt->execute();
 }
@@ -311,7 +404,7 @@ function get_inventory() {
 
     $sql = "SELECT i.*, s.sku, s.description, s.uom_primary
         FROM inventory i
-        JOIN sku_management s ON i.ficha = s.ficha
+        JOIN sku_management s ON i.sku = s.sku
         ORDER BY i.created_at DESC";
 
     $stmt = $connection->prepare($sql);
@@ -327,6 +420,24 @@ function get_inventory() {
     return $inventory;
 }
 
+// getting inventory from unit number
+function get_inventory_by_unit_number($unit_number) {
+    global $connection;
+
+    $unit_number = $connection->real_escape_string($unit_number);
+
+    $stmt = $connection->prepare("SELECT * FROM inventory WHERE unit_number = ? LIMIT 1");
+    $stmt->bind_param('s', $unit_number);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false || $result->num_rows === 0) return null;
+    
+    return $result->fetch_assoc();
+}
+
 // deleting inventory
 function delete_inventory($unit_number) {
     global $connection;
@@ -338,21 +449,22 @@ function delete_inventory($unit_number) {
     return $stmt->execute();
 }
 
-
-
 // --- SHIPPED ITEMS FUNCTIONS --- //
 // creating shipped items
 function create_shipped_items($data) {
     global $connection;
 
     $order_id = intval($data['order_id']);
-    $order_number = $connection->real_escape_string($data['order_number']);
-    $shipped_at = $connection->real_escape_string($data['shipped_at']);
-    $items = $data['items'];
+
+    // get order details
+    $order = get_order($order_id);
+    $order_number = $connection->real_escape_string($order['order_number']);
+    $items = get_order_items($order_id);
+    $shipped_at = date("Y-m-d G:i:s");
 
     $stmt = $connection->prepare("INSERT INTO shipped_items 
-        (order_id, order_number, unit_number, sku, sku_description, shipped_at)
-        VALUES (?, ?, ?, ?, ?, ?)"
+        (order_id, order_number, unit_number, sku, shipped_at)
+        VALUES (?, ?, ?, ?, ?)"
     );
 
     if (!$stmt) {
@@ -360,7 +472,7 @@ function create_shipped_items($data) {
     }
 
     foreach ($items as $item) {
-        $stmt->bind_param('isssss', $order_id, $order_number, $item['unit_number'], $item['sku'], $item['description'], $shipped_at);
+        $stmt->bind_param('issss', $order_id, $order_number, $item['unit_number'], $item['sku'], $shipped_at);
         if (!$stmt->execute()) {
             return false;
         }
@@ -393,4 +505,33 @@ function get_shipped_items() {
     return $shipped_items;
 }
 
-?>
+function confirm_mpl($reference_number) {
+    $mpl = get_mpl($reference_number);
+    $mpl_id = intval($mpl['id']);
+    $mpl_items = get_mpl_items($mpl_id);
+
+    foreach ($mpl_items as $mpl_item) {
+        get_sku_by_code($mpl_item['sku']);
+        create_inventory($mpl_item);
+    }
+
+    update_mpl_status($mpl_id);
+
+    notify_cms_mpl_confirmed($reference_number);
+};
+
+function ship_order($order_number) {
+    $order = get_order_by_number($order_number);
+    $order_id = intval($order['id']);
+    $order_items = get_order_items($order_id);
+
+    foreach ($order_items as $order_item) {
+        create_shipped_items($order_item);
+        delete_inventory($order_item['unit_number']);
+    }
+
+    // updates status + returns shipped at date
+    $shipped_at = update_order_status($order_id);
+    
+    notify_cms_order_shipped($order['order_number'], $shipped_at);
+}
