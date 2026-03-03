@@ -58,7 +58,7 @@
             <?php endforeach ?>
           </td>
           <td>
-            <?php if (isset($reference_number)) : ?>
+            <?php if ($mpl['status'] === 'open') : ?>
               <form class="callback-form" method="POST">
                 <input type="hidden" name="reference_number" value="<?= htmlspecialchars($mpl['reference_number']) ?>">
                 <button type="submit" name="confirm_mpl">

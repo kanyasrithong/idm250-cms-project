@@ -63,7 +63,7 @@
             <?php endforeach ?>
           </td>
           <td>
-            <?php if (isset($order_number)) : ?>
+            <?php if ($order['status'] === 'open') : ?>
               <form class="callback-form" method="POST">
                 <input type="hidden" name="order_number" value="<?= htmlspecialchars($order['order_number']) ?>">
                 <button type="submit" name="confirm_order">
