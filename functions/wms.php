@@ -155,7 +155,7 @@ function create_mpl($data) {
 
     $mpl_id = $connection->insert_id;
 
-    $stmt = $connection->prepare("INSERT INTO mpl_items 
+    $stmt = $connection->prepare("INSERT INTO mpl_items
         (mpl_id, unit_number, sku, quantity_shipped)
         VALUES (?, ?, ?, ?)");
 
