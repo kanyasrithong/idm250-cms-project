@@ -24,13 +24,12 @@
   <main>
     <div id="title">
       <h2>SKU Management</h2>
-      <button>+ ADD SKU</button>
     </div>
     <table>
       <tr>
         <th>SKU</th>
         <th>DESCRIPTION</th>
-        <th>UOM</th>
+        <th>UNIT OF MEASURE</th>
         <th>PIECES</th>
         <th>DIMENSIONS</th>
         <th>WEIGHT</th>

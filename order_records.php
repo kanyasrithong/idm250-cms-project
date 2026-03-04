@@ -5,6 +5,15 @@
   require "functions/wms.php";
   require_login();
   $page = "order_records";
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
+
+    $order_number = $_POST['order_number'];
+    ship_order($order_number);
+
+    header("Location: mpl_records.php");
+    exit;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +33,7 @@
   <main>
     <div id="title">
       <h2>Order Records</h2>
-      <h3><?= count($order_records) ?> orders</h3>
+      <h3><?= count($order_records) ?> Orders</h3>
     </div>
     <table>
       <tr>
@@ -32,11 +41,12 @@
         <th>COMPANY</th>
         <th>SHIPPING ADDRESS</th>
         <th>STATUS</th>
-        <th>ITEMS</th>
+        <th>ITEMS (UNIT NUMBER)</th>
         <th>ACTIONS</th>
       </tr>
 
       <?php foreach ($order_records as $order) : ?>
+        <?php $order_items = get_order_items($order['id']); ?>
         <tr>
           <td><?= $order['order_number']; ?></td>
           <td><?= $order['ship_to_company']?></td>
@@ -47,8 +57,21 @@
               <?= $order['ship_to_zip']?>
             </td>          
           <td><?= $order['status']?></td>
-          <td>-</td>
-          <td>-</td>
+          <td>
+            <?php foreach ($order_items as $order_item) : ?>
+              <p><?= $order_item['unit_number'] ?></p>
+            <?php endforeach ?>
+          </td>
+          <td>
+            <?php if ($order['status'] === 'open') : ?>
+              <form class="callback-form" method="POST">
+                <input type="hidden" name="order_number" value="<?= htmlspecialchars($order['order_number']) ?>">
+                <button type="submit" name="confirm_order">
+                  Ship
+                </button>
+              </form>
+            <?php endif ?>
+          </td>
         </tr>
       <?php endforeach ?>
 
