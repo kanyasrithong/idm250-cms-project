@@ -17,7 +17,7 @@
     $data = json_decode(file_get_contents('php://input'), true);
 
     // define required fields
-    $data_keys = ['reference_number', 'trailer_number', 'expected_arrival', 'items'];
+    $data_keys = ['reference_number', 'trailer_number', 'expected_arrival', 'items', 'quantity_shipped'];
 
 
     // validate required fields
