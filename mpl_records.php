@@ -61,8 +61,8 @@
             <?php if ($mpl['status'] === 'open') : ?>
               <form class="callback-form" method="POST">
                 <input type="hidden" name="reference_number" value="<?= htmlspecialchars($mpl['reference_number']) ?>">
-                <button type="submit" name="confirm_mpl">
-                  Confirm
+                <button type="submit" name="confirm_mpl" class="btn-small">
+                  CONFIRM
                 </button>
               </form>
             <?php endif ?>
