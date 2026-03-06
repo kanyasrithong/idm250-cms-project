@@ -29,6 +29,7 @@
     include "components/header.php";
     include "components/nav.php";
     $order_records = get_orders();
+    $shipped_orders = get_shipped_items();
   ?>
   <main>
     <div id="title">
@@ -45,7 +46,7 @@
         <th>ACTIONS</th>
       </tr>
 
-      <?php foreach ($order_records as $order) : ?>
+      <?php foreach ($order_records as $order) { ?>
         <?php $order_items = get_order_items($order['id']); ?>
         <tr>
           <td><?= $order['order_number']; ?></td>
@@ -56,29 +57,111 @@
               <?= $order['ship_to_state']?>,
               <?= $order['ship_to_zip']?>
             </td>          
-          <td><?= $order['status']?></td>
+          <td><?= strtolower($order['status']) === 'open' ? 'RECEIVED' : 'SHIPPED' ?></td>
+          <td>-</td>
           <td>
-            <?php foreach ($order_items as $order_item) : ?>
-              <p><?= $order_item['unit_number'] ?></p>
-            <?php endforeach ?>
-          </td>
-          <td>
-            <?php if ($order['status'] === 'open') : ?>
+            <button type="button"
+              class="view-button"
+              data-modal-id="order-modal-<?= $order['id'] ?>">
+              VIEW
+            </button>
+            <?php if (strtolower($order['status']) === 'open') { ?>
               <form class="callback-form" method="POST">
                 <input type="hidden" name="order_number" value="<?= htmlspecialchars($order['order_number']) ?>">
-                <button type="submit" name="confirm_order">
-                  Ship
+                <button type="submit" name="confirm_order" class="btn-small">
+                  SHIP
                 </button>
               </form>
-            <?php endif ?>
+            <?php } ?>
           </td>
         </tr>
-      <?php endforeach ?>
+      <?php } ?>
 
-      <?php if (empty($order_records)) : ?>
+      <?php if (empty($order_records)) { ?>
         <tr><td colspan="6">No order records found.</td></tr>
-      <?php endif; ?>
+      <?php } ?>
     </table>
+    <div id="title">
+      <h2>Shipped Orders</h2>
+      <h3><?= count($shipped_orders) ?> Shipped Orders</h3>
+    </div>
+    <table>
+      <tr>
+        <th>ORDER NUMBER</th>
+        <th>COMPANY</th>
+        <th>SHIPPED AT</th>
+        <th>ITEM COUNT</th>
+      </tr>
+      <?php foreach ($shipped_orders as $order) { ?>
+        <tr>
+          <td><?= $order['order_number'] ?></td>
+          <td><?= $order['ship_to_company'] ?></td>
+          <td><?= $order['shipped_at'] ?></td>
+          <td><?= $order['item_count'] ?></td>
+        </tr>
+      <?php } ?>
+      <?php if (empty($shipped_orders)) { ?>
+        <tr><td colspan="4">No shipped orders found.</td></tr>
+      <?php } ?>
+    </table>
+    <?php foreach ($order_records as $order) { ?>
+      <?php $order_items = get_order_items($order['id']); ?>
+      <div class="modal" id="order-modal-<?= $order['id'] ?>">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="modal-close"
+            data-modal-id="order-modal-<?= $order['id'] ?>">
+            X
+          </button>
+          <h2>ORDER ITEMS</h2>
+          <p>
+            <strong>Order Number:</strong>
+            <?= htmlspecialchars($order['order_number']) ?>
+          </p>
+          <?php if (empty($order_items)) { ?>
+            <p>No items found for this order.</p>
+          <?php } else { ?>
+            <table>
+              <tr>
+                <th>UNIT NUMBER</th>
+                <th>SKU</th>
+                <th>DESCRIPTION</th>
+              </tr>
+              <?php foreach ($order_items as $item) { ?>
+                <tr>
+                  <td><?= htmlspecialchars($item['unit_number']) ?></td>
+                  <td><?= htmlspecialchars($item['sku']) ?></td>
+                  <td><?= htmlspecialchars($item['description']) ?></td>
+                </tr>
+              <?php } ?>
+            </table>
+          <?php } ?>
+        </div>
+      </div>
+    <?php } ?>
   </main>
+  <script>
+    // Open modal
+    document.querySelectorAll('.view-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-modal-id');
+        document.getElementById(id).style.display = 'block';
+      });
+    });
+    // Close modal (x button)
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-modal-id');
+        document.getElementById(id).style.display = 'none';
+      });
+    });
+    // Close modal (clicking out of modal)
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+    });
+</script>
 </body>
 </html>
