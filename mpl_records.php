@@ -53,7 +53,7 @@
           <td><?= $mpl['status'] ?></td>
           <td>-</td>
           <td>
-            <button type="button" class="view-button" data-modal-id="mpl-modal-<?= $mpl['id'] ?>">
+            <button type="button" class="btn-small view-button" data-modal-id="mpl-modal-<?= $mpl['id'] ?>">
               VIEW
             </button>
             <?php if (strtolower($mpl['status']) === 'open') { ?>

@@ -11,7 +11,7 @@
     $order_number = $_POST['order_number'];
     ship_order($order_number);
 
-    header("Location: mpl_records.php");
+    header("Location: order_records.php");
     exit;
   }
 ?>
@@ -61,7 +61,7 @@
           <td>-</td>
           <td>
             <button type="button"
-              class="view-button"
+              class="btn-small view-button"
               data-modal-id="order-modal-<?= $order['id'] ?>">
               VIEW
             </button>
