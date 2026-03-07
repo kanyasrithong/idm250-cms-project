@@ -3,7 +3,10 @@
   header('Access-Control-Allow-Origin: *');
 
   require_once __DIR__ . '/../db.php';
+  require_once __DIR__ . '/../functions/auth.php';
   require __DIR__ . '/../functions/wms.php';
+  
+  check_api_key($env);
 
   $method = $_SERVER['REQUEST_METHOD'];
   $id = isset($_SERVER['PATH_INFO']) ? intval(ltrim($_SERVER['PATH_INFO'], '/')) : 0;
