@@ -52,8 +52,11 @@
   ?>
   <main>
     <div id="title">
-      <h2>SKU Management</h2>
-      <a href="index.php?create=1" class="btn">+ CREATE SKU</a>
+      <div class="title-left">
+        <h2>SKU Management</h2>
+        <a href="index.php?create=1" class="btn">+ CREATE SKU</a>
+      </div>
+      <h3><?= count($skus) ?> SKUs</h3>
     </div>
 
     <?php 
