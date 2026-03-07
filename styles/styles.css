@@ -22,7 +22,7 @@ body {
     color: var(--primary-text-color);
     margin: 0 auto;
     padding: 0;
-    /* height: 100vh; */
+    height: 100vh;
 }
 
 /* font styling */
@@ -64,6 +64,10 @@ header {
     background-color: var(--nav-background-color);
     color: var(--background-color);
     padding: 0.5rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 #actions {
@@ -90,12 +94,12 @@ nav {
     flex-direction: column;
     gap: 36px;
     background-color: var(--nav-background-color);
+    height: calc(100vh - 48px);
     padding: 1rem;
-    min-height: 100vh;
-    width: fit-content;
-    height: 100vh;
-
-    position: absolute;
+    width: 292px;
+    position: fixed;
+    top: 78px;
+    left: 0;
 
     .nav-button {
         display: flex;
@@ -133,9 +137,13 @@ nav {
 /* content styling */
 
 main {
+    position: fixed;
+    top: 48px;
+    left: 292px;
+    right: 0;
+    bottom: 0;
     margin: 2rem;
-    padding-left: 292px;
-    height: 100%;
+    overflow: auto;
 }
 
 table {
@@ -154,7 +162,7 @@ th, tr, td {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .callback-form {
