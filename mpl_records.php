@@ -1,5 +1,9 @@
 <?php
   session_start();
+
+  ini_set('display_errors', 1);
+  error_reporting(E_ALL);
+
   require_once "db.php";
   require_once "functions/auth.php";
   require "functions/wms.php";
@@ -9,11 +13,9 @@
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_mpl'])) {
 
     $reference_number = $_POST['reference_number'] ?? null;
-    if(!confirm_mpl($reference_number)) {
-      echo 'Error';
-    };
+    confirm_mpl($reference_number);
 
-    header("Location: index.php");
+    header("Location: mpl_records.php");
     exit;
   }
 ?>
