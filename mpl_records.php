@@ -9,7 +9,9 @@
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_mpl'])) {
 
     $reference_number = $_POST['reference_number'] ?? null;
-    confirm_mpl($reference_number);
+    if(!confirm_mpl($reference_number)) {
+      echo 'Error';
+    };
 
     header("Location: mpl_records.php");
     exit;

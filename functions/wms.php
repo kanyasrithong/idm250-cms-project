@@ -512,9 +512,11 @@ function confirm_mpl($reference_number) {
         create_inventory($mpl_item);
     }
 
+    update_mpl_status($mpl_id);
 
+    notify_cms_mpl_confirmed($reference_number);
 
-
+    return true;
 };
 
 function ship_order($order_number) {
