@@ -13,7 +13,7 @@
       echo 'Error';
     };
 
-    header("Location: mpl_records.php");
+    header("Location: index.php");
     exit;
   }
 ?>
