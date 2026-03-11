@@ -156,15 +156,14 @@ function create_mpl($data) {
     $mpl_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO mpl_items
-        (mpl_id, unit_number, sku, quantity_shipped)
-        VALUES (?, ?, ?, ?)");
+        (mpl_id, unit_number, sku)
+        VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
         $unit_number = $item['unit_number'];
         $sku = $connection->real_escape_string($item['sku']);
-        $quantity_shipped = intval($item['quantity_shipped']);
 
-        $stmt->bind_param('issi', $mpl_id, $unit_number, $sku, $quantity_shipped);
+        $stmt->bind_param('iss', $mpl_id, $unit_number, $sku);
         if(!$stmt->execute())
             return false;
     }
@@ -267,8 +266,8 @@ function create_order($data) {
     $order_id = $connection->insert_id;
 
     $stmt = $connection->prepare("INSERT INTO order_items 
-        (order_id, unit_number, sku, quantity_shipped)
-        VALUES (?, ?, ?, ?)");
+        (order_id, unit_number, sku)
+        VALUES (?, ?, ?)");
 
     foreach ($items as $item) {
         // finds item details in inventory
@@ -276,9 +275,8 @@ function create_order($data) {
 
         $unit_number = $connection->real_escape_string($find_item['unit_number']);
         $sku = $connection->real_escape_string($find_item['sku']);
-        $quantity_shipped = intval($find_item['quantity_shipped']);
 
-        $stmt->bind_param('issi', $order_id, $unit_number, $sku, $quantity_shipped);
+        $stmt->bind_param('iss', $order_id, $unit_number, $sku);
         if(!$stmt->execute())
             return false;
     }
@@ -387,13 +385,12 @@ function create_inventory($data) {
     
     $unit_number = $connection->real_escape_string($data['unit_number']);
     $sku = $connection->real_escape_string($data['sku']);
-    $quantity_shipped = intval($data['quantity_shipped']);
 
     $stmt = $connection->prepare("INSERT INTO inventory 
-        (unit_number, sku, quantity_shipped)
-        VALUES (?, ?, ?)");
+        (unit_number, sku)
+        VALUES (?, ?)");
 
-    $stmt->bind_param('ssi', $unit_number, $sku, $quantity_shipped);
+    $stmt->bind_param('ss', $unit_number, $sku);
 
     return $stmt->execute();
 }

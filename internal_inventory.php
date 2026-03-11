@@ -32,7 +32,6 @@
         <th>SKU</th>
         <th>DESCRIPTION</th>
         <th>UNIT OF MEASURE</th>
-        <th>QUANTITY SHIPPED</th>
         <th>CREATED AT</th>
       </tr>
 
@@ -42,7 +41,6 @@
           <td><?= $inventory['sku']?></td>
           <td><?= $inventory['description']?></td>
           <td><?= $inventory['uom_primary']?></td>
-          <td><?= $inventory['quantity_shipped']?></td>
           <td><?= $inventory['created_at']?></td>
         </tr>
       <?php endforeach ?>
