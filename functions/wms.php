@@ -514,7 +514,7 @@ function confirm_mpl($reference_number) {
 
     update_mpl_status($mpl_id);
 
-    notify_cms_mpl_confirmed($reference_number);
+
 };
 
 function ship_order($order_number) {
