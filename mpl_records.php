@@ -13,7 +13,14 @@
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_mpl'])) {
 
     $reference_number = $_POST['reference_number'] ?? null;
-    confirm_mpl($reference_number);
+    $result = confirm_mpl($reference_number);
+
+    if (!$result['success']) {
+        $error_message = $result['message'];
+    } else {
+        header("Location: mpl_records.php");
+        exit;
+    }
 
     header("Location: mpl_records.php");
     exit;
@@ -102,6 +109,9 @@
         </div>
       </div>
     <?php } ?>
+    <?php if (isset($error_message)): ?>
+      <div class="error"><?= htmlspecialchars($error_message) ?></div>
+    <?php endif; ?>
   </main>
   <script>
     // Open modal

@@ -504,6 +504,11 @@ function get_shipped_items() {
 
 function confirm_mpl($reference_number) {
     $mpl = get_mpl($reference_number);
+
+    if (!$mpl) {
+        return ['success' => false, 'message' => 'MPL not found'];
+    }
+
     $mpl_id = intval($mpl['id']);
     $mpl_items = get_mpl_items($mpl_id);
 
@@ -514,7 +519,14 @@ function confirm_mpl($reference_number) {
 
     update_mpl_status($mpl_id);
 
-    notify_cms_mpl_confirmed($reference_number);
+    $response = notify_cms_mpl_confirmed($reference_number);
+
+    if (!$response || isset($response['error'])) {
+        $detail = $response['details'] ?? $response['error'] ?? 'Unknown error';
+        return ['success' => false, 'message' => $detail];
+    }
+
+    return ['success' => true];
 };
 
 function ship_order($order_number) {
