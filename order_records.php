@@ -42,7 +42,6 @@
         <th>COMPANY</th>
         <th>SHIPPING ADDRESS</th>
         <th>STATUS</th>
-        <th>ITEMS (UNIT NUMBER)</th>
         <th>ACTIONS</th>
       </tr>
 
@@ -58,7 +57,6 @@
               <?= $order['ship_to_zip']?>
             </td>          
           <td><?= strtolower($order['status']) === 'open' ? 'RECEIVED' : 'SHIPPED' ?></td>
-          <td>-</td>
           <td>
             <button type="button"
               class="btn-small view-button"

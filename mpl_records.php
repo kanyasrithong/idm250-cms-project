@@ -41,7 +41,6 @@
         <th>TRAILER NUMBER</th>
         <th>EXPECTED ARRIVAL</th>
         <th>STATUS</th>
-        <th>ITEMS (UNIT NUMBER)</th>
         <th>ACTIONS</th>
       </tr>
 
@@ -51,7 +50,6 @@
           <td><?= $mpl['trailer_number'] ?></td>
           <td><?= $mpl['expected_arrival'] ?></td>
           <td><?= $mpl['status'] ?></td>
-          <td>-</td>
           <td>
             <button type="button" class="btn-small view-button" data-modal-id="mpl-modal-<?= $mpl['id'] ?>">
               VIEW
