@@ -123,7 +123,25 @@
             <?= htmlspecialchars($order['order_number']) ?>
           </p>
           <?php if (empty($order_items)) { ?>
-            <p>No items found for this order.</p>
+            <?php $shipped_items = get_shipped_items_by_number($order['order_number']) ?>
+            <?php if (empty($shipped_items)) { ?>
+              <p>No items found for this order.</p>
+            <?php } else { ?>
+              <table>
+                <tr>
+                  <th>UNIT NUMBER</th>
+                  <th>SKU</th>
+                  <th>DESCRIPTION</th>
+                </tr>
+                <?php foreach ($shipped_items as $item) { ?>
+                  <tr>
+                    <td><?= htmlspecialchars($item['unit_number']) ?></td>
+                    <td><?= htmlspecialchars($item['sku']) ?></td>
+                    <td><?= htmlspecialchars($item['description']) ?></td>
+                  </tr>
+                <?php } ?>
+              </table>
+            <?php } ?>
           <?php } else { ?>
             <table>
               <tr>

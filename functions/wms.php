@@ -502,6 +502,23 @@ function get_shipped_items() {
     return $shipped_items;
 }
 
+function get_shipped_items_by_number($order_number) {
+    global $connection;
+
+    $order_number = $connection->real_escape_string($order_number);
+
+    $stmt = $connection->prepare("SELECT * FROM shipped_items WHERE order_number = ? LIMIT 1");
+    $stmt->bind_param('s', $order_number);
+
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($result == false || $result->num_rows === 0) return null;
+    
+    return $result->fetch_assoc();
+}
+
 function confirm_mpl($reference_number) {
     $mpl = get_mpl($reference_number);
 
