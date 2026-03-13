@@ -35,7 +35,7 @@ function notify_cms_mpl_confirmed($reference_number) {
     global $env;
 
     $url = 'https://digmstudents.westphal.drexel.edu/cp3282/idm250/api/mpls.php';
-    $api_key = $env['CMS_API_KEY'];
+    $api_key = 'jbccms';
 
     $data = [
       'action' => 'confirm',
@@ -49,7 +49,7 @@ function notify_cms_order_shipped($order_number, $shipped_at) {
     global $env;
 
     $url = 'https://digmstudents.westphal.drexel.edu/cp3282/idm250/api/orders.php';
-    $api_key = $env['CMS_API_KEY'];
+    $api_key = 'jbccms';
 
     $data = [
         'action' => 'ship',
