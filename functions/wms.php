@@ -521,10 +521,8 @@ function confirm_mpl($reference_number) {
 
     $response = notify_cms_mpl_confirmed($reference_number);
 
-    if (!$response || isset($response['error'])) {
-        $detail = $response['details'] ?? $response['error'] ?? 'Unknown error';
-        return ['success' => false, 'message' => $detail];
-    }
+    var_dump($response);
+    die(); 
 
     return ['success' => true];
 };
