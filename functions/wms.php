@@ -534,8 +534,9 @@ function ship_order($order_number) {
     $order_id = intval($order['id']);
     $order_items = get_order_items($order_id);
 
+    create_shipped_items(['order_id' => $order_id]);
+
     foreach ($order_items as $order_item) {
-        create_shipped_items($order_item);
         delete_inventory($order_item['unit_number']);
     }
 

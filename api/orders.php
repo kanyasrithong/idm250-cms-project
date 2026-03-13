@@ -44,13 +44,11 @@
     $missing_items = [];
 
     foreach ($data['items'] as $item) {
-      $unit_number = get_inventory_by_unit_number($item['unit_number']);
-    
-      if (!$unit_number) {
+      if (!get_inventory_by_unit_number($item['unit_number'])) {
         $missing_items[] = $item['unit_number'];
       }
 
-      if ($missing_items) {
+      if (!empty($missing_items)) {
         http_response_code(400);
         echo json_encode(['error' => 'Bad Request', 'details' => 'Units not in WMS inventory: ' . implode(', ', $missing_items)]);
         exit();

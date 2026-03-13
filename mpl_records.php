@@ -21,11 +21,9 @@
         header("Location: mpl_records.php");
         exit;
     }
-
-    header("Location: mpl_records.php");
-    exit;
   }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
