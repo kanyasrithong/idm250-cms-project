@@ -507,7 +507,10 @@ function get_shipped_items_by_number($order_number) {
 
     $order_number = $connection->real_escape_string($order_number);
 
-    $stmt = $connection->prepare("SELECT * FROM shipped_items WHERE order_number = ?");
+    $stmt = $connection->prepare("SELECT si.unit_number, si.sku, s.description
+    FROM shipped_items si
+    JOIN sku_management s ON s.sku = si.sku
+    WHERE order_number = ?");
     $stmt->bind_param('s', $order_number);
 
     $stmt->execute();
@@ -516,7 +519,7 @@ function get_shipped_items_by_number($order_number) {
 
     if($result == false || $result->num_rows === 0) return [];
     
-    return $result->fetch_all(MYSQLI_ASSOC);;
+    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 function confirm_mpl($reference_number) {
