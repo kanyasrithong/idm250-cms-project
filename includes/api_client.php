@@ -34,7 +34,7 @@
 function notify_cms_mpl_confirmed($reference_number) {
     global $env;
 
-    $url = 'https://digmstudents.westphal.drexel.edu/cp3282/idm250/api/mpls.php';
+    $url = 'https://digmstudents.westphal.drexel.edu/~cp3282/idm250/api/mpls.php';
     $api_key = 'jbccms';
 
     $data = [
@@ -48,7 +48,7 @@ function notify_cms_mpl_confirmed($reference_number) {
 function notify_cms_order_shipped($order_number, $shipped_at) {
     global $env;
 
-    $url = 'https://digmstudents.westphal.drexel.edu/cp3282/idm250/api/orders.php';
+    $url = 'https://digmstudents.westphal.drexel.edu/~cp3282/idm250/api/orders.php';
     $api_key = 'jbccms';
 
     $data = [
