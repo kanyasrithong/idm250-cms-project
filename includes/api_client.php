@@ -22,7 +22,7 @@
     $status_code = intval($matches[1] ?? 0);
 
     if ($status_code < 200 || $status_code >= 300) {
-        file_put_contents(__DIR__ . '/debug.txt', "Status: $status\nResponse: $response");
+        file_put_contents(__DIR__ . '/../debug.txt', "Status: $status\nResponse: $response");
         return null;
     }
 
