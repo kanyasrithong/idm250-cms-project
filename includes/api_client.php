@@ -17,10 +17,12 @@
         return null;
     }
 
-    $status = $http_response_header[0] ?? '';  // e.g. "HTTP/1.1 400 Bad Request"
+    $status = $http_response_header[0] ?? '';
+    preg_match('/HTTP\/\d\.\d (\d+)/', $status, $matches);
+    $status_code = intval($matches[1] ?? 0);
 
-    if ($response === false || strpos($status, '200') === false) {
-        error_log("api_request error [$status]: $method $url");
+    if ($status_code < 200 || $status_code >= 300) {
+        error_log("api_request error [$status]: $method $url — Response: $response");
         return null;
     }
 
