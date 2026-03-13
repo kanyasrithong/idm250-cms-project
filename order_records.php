@@ -9,10 +9,15 @@
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_order'])) {
 
     $order_number = $_POST['order_number'];
-    ship_order($order_number);
 
-    header("Location: order_records.php");
-    exit;
+    $result = ship_order($order_number);;
+
+    if (!$result['success']) {
+        $error_message = $result['message'];
+    } else {
+        header("Location: order_records.php");
+        exit;
+    }
   }
 ?>
 <!DOCTYPE html>

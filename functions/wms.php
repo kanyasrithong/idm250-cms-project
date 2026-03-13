@@ -519,18 +519,24 @@ function confirm_mpl($reference_number) {
 
     update_mpl_status($mpl_id);
 
-    $response = notify_cms_mpl_confirmed($reference_number);
-
-    var_dump($response);
-    die(); 
+    notify_cms_mpl_confirmed($reference_number);
 
     return ['success' => true];
 };
 
 function ship_order($order_number) {
     $order = get_order_by_number($order_number);
+
+    if (!$order) {
+        return ['success' => false, 'message' => 'Order not found'];
+    }
+
     $order_id = intval($order['id']);
     $order_items = get_order_items($order_id);
+
+    if (empty($order_items)) {
+        return ['success' => false, 'message' => 'No items found for this order'];
+    }
 
     create_shipped_items(['order_id' => $order_id]);
 
@@ -540,6 +546,7 @@ function ship_order($order_number) {
 
     // updates status + returns shipped at date
     $shipped_at = update_order_status($order_id);
-    
     notify_cms_order_shipped($order['order_number'], $shipped_at);
+
+    return ['success' => true];
 }
